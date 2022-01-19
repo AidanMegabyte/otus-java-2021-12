@@ -26,7 +26,16 @@ allprojects {
 
     dependencyManagement {
         dependencies {
+            imports {
+                mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootDependenciesVersion}")
+            }
             dependency "com.google.guava:guava:${guavaVersion}"
+        }
+    }
+
+    configurations.all {
+        resolutionStrategy {
+            failOnVersionConflict()
         }
     }
 }
