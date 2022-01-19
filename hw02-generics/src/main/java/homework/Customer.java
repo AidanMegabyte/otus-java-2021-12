@@ -57,6 +57,7 @@ public class Customer {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Customer customer = (Customer) o;
+        // В данном случае id достаточно для однозначной идентификации, остальные поля не нужны
         return id == customer.id;
     }
 
