@@ -1,23 +1,25 @@
 package homework;
 
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class CustomerReverseOrder {
 
     //todo: 2. надо реализовать методы этого класса
     //надо подобрать подходящую структуру данных, тогда решение будет в "две строчки"
 
-    // Стек - "первым пришел, последним ушел".
-    // Добавление элементов производится в конец.
-    // Удаление элементов производится тоже с конца.
-    private final Stack<Customer> stack = new Stack<>();
+    // Deque - двусторонняя очередь.
+    // Добавление элементов производится в начало.
+    // Удаление элементов производится тоже с начала.
+    // По-хорошему, нужен стек, но класс Stack считается проблемным и устаревшим,
+    // и вместо него рекомендуют использовать реализации Deque.
+    private final Deque<Customer> deque = new ArrayDeque<>();
 
     public void add(Customer customer) {
-        stack.push(customer);
+        deque.addFirst(customer);
     }
 
     public Customer take() {
-        // Во избежание исключения проверяем, что стек не пустой
-        return stack.empty() ? null : stack.pop();
+        return deque.pollFirst();
     }
 }
