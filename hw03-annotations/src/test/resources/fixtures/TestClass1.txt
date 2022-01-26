@@ -10,4 +10,4 @@ Test 2
 After 1
 After 2
 TestClass1 > test2 PASSED
-2 tests completed, 2 passed, 0 failed
+2 test(s) completed, 2 passed, 0 failed

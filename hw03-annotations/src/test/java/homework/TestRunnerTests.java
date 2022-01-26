@@ -42,6 +42,15 @@ public class TestRunnerTests {
         assertThat(testClass1OutputActual).isEqualTo(testClass1OutputExpected);
     }
 
+    @Test
+    @DisplayName("Отображаемые имена для классов и методов")
+    public void testClassAndMethodsNames() throws IOException {
+        new TestRunner().runTestSuite(TestClass2.class);
+        String testClass1OutputExpected = getFixtureAsString("fixtures/TestClass2.txt");
+        String testClass1OutputActual = outContent.toString().trim().replace("\r", "");
+        assertThat(testClass1OutputActual).isEqualTo(testClass1OutputExpected);
+    }
+
     private String getFixtureAsString(String fileName) throws IOException {
         InputStream fixtureInputStream = Objects.requireNonNull(
                 getClass().getClassLoader().getResourceAsStream(fileName)

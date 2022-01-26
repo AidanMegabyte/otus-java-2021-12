@@ -2,11 +2,14 @@ package homework;
 
 import homework.annotations.After;
 import homework.annotations.Before;
+import homework.annotations.DisplayName;
 import homework.annotations.Test;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -20,7 +23,7 @@ public class TestRunner {
     public void runTestSuite(Class<?> testSuiteClass) {
 
         // Название списка тестовых сценариев
-        String testSuiteName = testSuiteClass.getSimpleName();
+        String testSuiteName = getDisplayName(testSuiteClass, testSuiteClass::getSimpleName);
 
         // Получаем списки методов, помеченных определенными аннотациями
         // Поиск ведется только среди открытых методов класса
@@ -35,14 +38,28 @@ public class TestRunner {
             Optional<Throwable> testResult = runTest(testSuiteClass, testMethod, beforeMethods, afterMethods);
             passedQty += testResult.isEmpty() ? 1 : 0;
             testResult.ifPresent(System.out::println);
-            String testName = testMethod.getName();
+            String testName = getDisplayName(testMethod, testMethod::getName);
             System.out.printf("%s > %s %s\n", testSuiteName, testName, (testResult.isEmpty() ? "PASSED" : "FAILED"));
         }
 
         // Выводим суммарную статистику выполнения тестовых сценариев
         int totalQty = testMethods.size();
         int failedQty = totalQty - passedQty;
-        System.out.printf("%d tests completed, %d passed, %d failed\n", totalQty, passedQty, failedQty);
+        System.out.printf("%d test(s) completed, %d passed, %d failed\n", totalQty, passedQty, failedQty);
+    }
+
+    /**
+     * Получение отображаемого имени
+     *
+     * @param element         класс списка тестовых сценариев или тестовый сценарий
+     * @param defaultSupplier supplier на случай, если аннотация @DisplayName отсутствует
+     * @return значение аннотации @DisplayName, если таковая есть, в ином случае - название класса/метода
+     */
+    private String getDisplayName(AnnotatedElement element, Supplier<String> defaultSupplier) {
+        if (element.isAnnotationPresent(DisplayName.class)) {
+            return element.getAnnotation(DisplayName.class).value();
+        }
+        return defaultSupplier.get();
     }
 
     /**
