@@ -51,6 +51,12 @@ public class TestRunnerTests {
         test(TestClass3.class, "fixtures/TestClass3.txt");
     }
 
+    @Test
+    @DisplayName("Несколько аннотаций на методе")
+    public void testMultipleAnnotations() throws IOException {
+        test(TestClass4.class, "fixtures/TestClass4.txt");
+    }
+
     private void test(Class<?> testClass, String fixturePath) throws IOException {
         new TestRunner().runTestSuite(testClass);
         String outputExpected = getFixtureAsString(fixturePath);
