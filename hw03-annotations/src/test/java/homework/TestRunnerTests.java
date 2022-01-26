@@ -36,7 +36,7 @@ public class TestRunnerTests {
     @Test
     @DisplayName("Корректность нахождения методов")
     public void testValidMethodSearching() throws IOException {
-        TestRunner.runTestClass(TestClass1.class);
+        new TestRunner().runTestSuite(TestClass1.class);
         String testClass1OutputExpected = getFixtureAsString("fixtures/TestClass1.txt");
         String testClass1OutputActual = outContent.toString().trim().replace("\r", "");
         assertThat(testClass1OutputActual).isEqualTo(testClass1OutputExpected);

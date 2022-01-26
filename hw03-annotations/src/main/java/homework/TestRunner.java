@@ -5,12 +5,8 @@ import homework.annotations.Before;
 import homework.annotations.Test;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -19,70 +15,81 @@ public class TestRunner {
     /**
      * Запуск тестовых сценариев из указанного класса
      *
-     * @param testClass класс, содержащий тестовые сценарии
+     * @param testSuiteClass класс, содержащий тестовые сценарии
      */
-    public static void runTestClass(Class<?> testClass) {
+    public void runTestSuite(Class<?> testSuiteClass) {
 
-        String className = testClass.getSimpleName();
+        // Название списка тестовых сценариев
+        String testSuiteName = testSuiteClass.getSimpleName();
 
         // Получаем списки методов, помеченных определенными аннотациями
-        List<Method> beforeMethods = findMethods(testClass, Before.class);
-        List<Method> testMethods = findMethods(testClass, Test.class);
-        List<Method> afterMethods = findMethods(testClass, After.class);
+        // Поиск ведется только среди открытых методов класса
+        List<Method> methods = Arrays.asList(testSuiteClass.getMethods());
+        Collection<Method> testMethods = filterMethodsByAnnotation(methods, Test.class);
+        Collection<Method> beforeMethods = filterMethodsByAnnotation(methods, Before.class);
+        Collection<Method> afterMethods = filterMethodsByAnnotation(methods, After.class);
 
-        // Запускаем тесты по очереди с выводом статуса выполнения
+        // Запускаем тестовые сценарии по очереди с выводом статуса выполнения
         int passedQty = 0;
-        int failedQty = 0;
-        for (Method method : testMethods) {
-            String methodName = method.getName();
-            boolean passed = true;
-            try {
-                runTest(testClass, beforeMethods, method, afterMethods);
-                passedQty++;
-            } catch (Throwable e) {
-                passed = false;
-                failedQty++;
-            } finally {
-                System.out.printf("%s > %s %s\n", className, methodName, (passed ? "PASSED" : "FAILED"));
-            }
+        for (Method testMethod : testMethods) {
+            Optional<Throwable> testResult = runTest(testSuiteClass, testMethod, beforeMethods, afterMethods);
+            passedQty += testResult.isEmpty() ? 1 : 0;
+            testResult.ifPresent(System.out::println);
+            String testName = testMethod.getName();
+            System.out.printf("%s > %s %s\n", testSuiteName, testName, (testResult.isEmpty() ? "PASSED" : "FAILED"));
         }
 
-        // Считаем и выводим суммарную статистику выполнения тестов
-        int totalQty = passedQty + failedQty;
+        // Выводим суммарную статистику выполнения тестовых сценариев
+        int totalQty = testMethods.size();
+        int failedQty = totalQty - passedQty;
         System.out.printf("%d tests completed, %d passed, %d failed\n", totalQty, passedQty, failedQty);
     }
 
     /**
-     * Поиск открытых методов класса, помеченных аннотацией
+     * Фильтрация методов класса по аннотации
      *
-     * @param testClass       класс, в котором осуществляется поиск
-     * @param annotationClass аннотация, которой должны быть помечены открытые методы класса
-     * @return список открытых методов переданного класса, которые помечены переданной аннотацией
+     * @param methods    методы класса
+     * @param annotation аннотация
+     * @return коллекцию методов класса, помеченных указанной аннотацией
+     * Методы отсортированы по названию в алфавитном порядке
      */
-    private static List<Method> findMethods(Class<?> testClass, Class<? extends Annotation> annotationClass) {
-        return Arrays.stream(testClass.getMethods())
-                .filter(method -> method.isAnnotationPresent(annotationClass))
+    private Collection<Method> filterMethodsByAnnotation(Collection<Method> methods,
+                                                         Class<? extends Annotation> annotation) {
+        return methods.stream()
+                .filter(method -> method.isAnnotationPresent(annotation))
                 .sorted(Comparator.comparing(Method::getName))
                 .collect(Collectors.toList());
     }
 
     /**
-     * Запуск выполнения теста
+     * Запуск тестового сценария
      *
-     * @param testClass     класс с тестовыми сценариями
-     * @param beforeMethods методы с аннотацией Before
-     * @param testMethod    метод запуска тестового сценария
-     * @param afterMethods  методы с аннотацией After
-     * @throws InvocationTargetException
-     * @throws IllegalAccessException
+     * @param testSuiteClass класс списка тестовых сценариев
+     * @param testMethod     метод, помеченный аннотацией @Test
+     * @param beforeMethods  методы, помеченные аннотацией @Before
+     * @param afterMethods   методы, помеченные аннотацией @After
+     * @return Optional: пустой при успешном выполнении тестового сценария, или содержащий ошибку в ином случае
      */
-    private static void runTest(Class<?> testClass, List<Method> beforeMethods, Method testMethod, List<Method> afterMethods) throws Throwable {
-        Object classInstance = testClass.getConstructor().newInstance();
-        List<Method> methods = Stream.of(beforeMethods, List.of(testMethod), afterMethods)
-                .flatMap(Collection::stream)
-                .toList();
-        for (Method method : methods) {
-            method.invoke(classInstance);
+    private Optional<Throwable> runTest(Class<?> testSuiteClass,
+                                        Method testMethod,
+                                        Collection<Method> beforeMethods,
+                                        Collection<Method> afterMethods) {
+
+        List<Method> methods =
+                Stream.of(beforeMethods, List.of(testMethod), afterMethods)
+                        .flatMap(Collection::stream)
+                        .toList();
+
+        Throwable error = null;
+        try {
+            Object instance = testSuiteClass.getConstructor().newInstance();
+            for (Method method : methods) {
+                method.invoke(instance);
+            }
+        } catch (Throwable e) {
+            error = e;
         }
+
+        return Optional.ofNullable(error);
     }
 }
