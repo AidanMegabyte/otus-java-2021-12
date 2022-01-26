@@ -30,6 +30,7 @@ allprojects {
                 mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootDependenciesVersion}")
             }
             dependency "com.google.guava:guava:${guavaVersion}"
+            dependency "commons-io:commons-io:${apacheCommonsIoVersion}"
         }
     }
 
