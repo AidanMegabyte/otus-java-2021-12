@@ -34,21 +34,28 @@ public class TestRunnerTests {
     }
 
     @Test
-    @DisplayName("Корректность нахождения методов")
+    @DisplayName("Корректность нахождения методов, помеченных аннотациями")
     public void testValidMethodSearching() throws IOException {
-        new TestRunner().runTestSuite(TestClass1.class);
-        String testClass1OutputExpected = getFixtureAsString("fixtures/TestClass1.txt");
-        String testClass1OutputActual = outContent.toString().trim().replace("\r", "");
-        assertThat(testClass1OutputActual).isEqualTo(testClass1OutputExpected);
+        test(TestClass1.class, "fixtures/TestClass1.txt");
     }
 
     @Test
     @DisplayName("Отображаемые имена для классов и методов")
     public void testClassAndMethodsNames() throws IOException {
-        new TestRunner().runTestSuite(TestClass2.class);
-        String testClass1OutputExpected = getFixtureAsString("fixtures/TestClass2.txt");
-        String testClass1OutputActual = outContent.toString().trim().replace("\r", "");
-        assertThat(testClass1OutputActual).isEqualTo(testClass1OutputExpected);
+        test(TestClass2.class, "fixtures/TestClass2.txt");
+    }
+
+    @Test
+    @DisplayName("Отсутствие тестов")
+    public void testNoTests() throws IOException {
+        test(TestClass3.class, "fixtures/TestClass3.txt");
+    }
+
+    private void test(Class<?> testClass, String fixturePath) throws IOException {
+        new TestRunner().runTestSuite(testClass);
+        String outputExpected = getFixtureAsString(fixturePath);
+        String outputActual = outContent.toString().trim().replace("\r", "");
+        assertThat(outputActual).isEqualTo(outputExpected);
     }
 
     private String getFixtureAsString(String fileName) throws IOException {
