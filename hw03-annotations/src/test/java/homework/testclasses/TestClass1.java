@@ -1,47 +1,47 @@
-package homework;
+package homework.testclasses;
 
-import homework.annotations.After;
-import homework.annotations.Before;
+import homework.annotations.AfterEach;
+import homework.annotations.BeforeEach;
 import homework.annotations.Test;
 
 public class TestClass1 {
 
-    @Before
+    @BeforeEach
     public void setUp1() {
         System.out.println("Before 1");
     }
 
-    @Before
+    @BeforeEach
     public void setUp2() {
         System.out.println("Before 2");
     }
 
-    @Before
+    @BeforeEach
     protected void setUp3() {
         System.out.println("Before 3 (will not be printed)");
     }
 
-    @Before
+    @BeforeEach
     private void setUp4() {
         System.out.println("Before 4 (will not be printed)");
     }
 
-    @After
+    @AfterEach
     public void tearDown1() {
         System.out.println("After 1");
     }
 
-    @After
+    @AfterEach
     public void tearDown2() {
         System.out.println("After 2");
     }
 
-    @After
+    @AfterEach
     protected void tearDown3() {
         System.out.println("After 3 (will not be printed)");
     }
 
-    @After
+    @AfterEach
     private void tearDown4() {
         System.out.println("After 4 (will not be printed)");
     }

@@ -1,5 +1,6 @@
 package homework;
 
+import homework.testclasses.*;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

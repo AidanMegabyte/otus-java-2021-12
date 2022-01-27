@@ -1,7 +1,7 @@
 package homework;
 
-import homework.annotations.After;
-import homework.annotations.Before;
+import homework.annotations.AfterEach;
+import homework.annotations.BeforeEach;
 import homework.annotations.DisplayName;
 import homework.annotations.Test;
 
@@ -16,62 +16,64 @@ import java.util.stream.Stream;
 public class TestRunner {
 
     /**
-     * Запуск тестовых сценариев из указанного класса
+     * Запуск набора тестовых сценариев
      *
-     * @param testSuiteClass класс, содержащий тестовые сценарии
+     * @param testSuiteClass класс, содержащий набор тестовых сценариев
      */
     public void runTestSuite(Class<?> testSuiteClass) {
 
-        // Название списка тестовых сценариев
+        // Название набора тестовых сценариев
         String testSuiteName = getDisplayName(testSuiteClass, testSuiteClass::getSimpleName);
 
         // Получаем списки методов, помеченных определенными аннотациями
         // Поиск ведется только среди открытых методов класса
         List<Method> methods = Arrays.asList(testSuiteClass.getMethods());
-        Collection<Method> testMethods = filterMethodsByAnnotation(methods, Test.class);
-        Collection<Method> beforeMethods = filterMethodsByAnnotation(methods, Before.class);
-        Collection<Method> afterMethods = filterMethodsByAnnotation(methods, After.class);
+        List<Method> tests = filterMethodsByAnnotation(methods, Test.class);
+        List<Method> beforeEaches = filterMethodsByAnnotation(methods, BeforeEach.class);
+        List<Method> afterEaches = filterMethodsByAnnotation(methods, AfterEach.class);
 
         // Запускаем тестовые сценарии по очереди с выводом статуса выполнения
         int passedQty = 0;
-        for (Method testMethod : testMethods) {
-            Optional<Throwable> testResult = runTest(testSuiteClass, testMethod, beforeMethods, afterMethods);
-            passedQty += testResult.isEmpty() ? 1 : 0;
-            testResult.ifPresent(ex -> printError(ex.getCause(), testSuiteClass.getName()));
-            String testName = getDisplayName(testMethod, testMethod::getName);
-            System.out.printf("%s > %s %s\n\n", testSuiteName, testName, (testResult.isEmpty() ? "PASSED" : "FAILED"));
+        for (Method test : tests) {
+            Optional<Throwable> testResult = runTest(testSuiteClass, test, beforeEaches, afterEaches);
+            boolean passed = testResult.isEmpty();
+            passedQty += passed ? 1 : 0;
+            testResult.ifPresent(ex -> printError(ex, testSuiteClass.getName()));
+            String testName = getDisplayName(test, test::getName);
+            String testStatus = passed ? "PASSED" : "FAILED";
+            System.out.printf("%s > %s %s\n\n", testSuiteName, testName, testStatus);
         }
 
-        // Выводим суммарную статистику выполнения тестовых сценариев
-        int totalQty = testMethods.size();
+        // Выводим суммарную статистику выполнения набора тестовых сценариев
+        int totalQty = tests.size();
         int failedQty = totalQty - passedQty;
         System.out.printf("%d test(s) completed, %d passed, %d failed\n\n", totalQty, passedQty, failedQty);
     }
 
     /**
-     * Получение отображаемого имени
+     * Получение отображаемого имени класса
      *
-     * @param element         класс списка тестовых сценариев или тестовый сценарий
+     * @param clazz           класс
      * @param defaultSupplier supplier на случай, если аннотация @DisplayName отсутствует
-     * @return значение аннотации @DisplayName, если таковая есть, в ином случае - название класса/метода
+     * @return значение аннотации @DisplayName, если она есть, в ином случае - результат defaultSupplier
      */
-    private String getDisplayName(AnnotatedElement element, Supplier<String> defaultSupplier) {
-        if (element.isAnnotationPresent(DisplayName.class)) {
-            return element.getAnnotation(DisplayName.class).value();
+    private String getDisplayName(AnnotatedElement clazz, Supplier<String> defaultSupplier) {
+        if (clazz.isAnnotationPresent(DisplayName.class)) {
+            return clazz.getAnnotation(DisplayName.class).value();
         }
         return defaultSupplier.get();
     }
 
     /**
-     * Фильтрация методов класса по аннотации
+     * Фильтрация методов по аннотации
      *
-     * @param methods    методы класса
+     * @param methods    методы
      * @param annotation аннотация
-     * @return коллекцию методов класса, помеченных указанной аннотацией
+     * @return коллекцию методов, помеченных указанной аннотацией
      * Методы отсортированы по названию в алфавитном порядке
      */
-    private Collection<Method> filterMethodsByAnnotation(Collection<Method> methods,
-                                                         Class<? extends Annotation> annotation) {
+    private List<Method> filterMethodsByAnnotation(Collection<Method> methods,
+                                                   Class<? extends Annotation> annotation) {
         return methods.stream()
                 .filter(method -> method.isAnnotationPresent(annotation))
                 .sorted(Comparator.comparing(Method::getName))
@@ -81,19 +83,19 @@ public class TestRunner {
     /**
      * Запуск тестового сценария
      *
-     * @param testSuiteClass класс списка тестовых сценариев
-     * @param testMethod     метод, помеченный аннотацией @Test
-     * @param beforeMethods  методы, помеченные аннотацией @Before
-     * @param afterMethods   методы, помеченные аннотацией @After
+     * @param testSuiteClass класс набора тестовых сценариев
+     * @param test           метод, запускающий тестовый сценарий
+     * @param beforeEaches   методы, выполняющиеся перед запуском каждого тестового сценария
+     * @param afterEaches    методы, выполняющиеся после запуска каждого тестового сценария
      * @return Optional: пустой при успешном выполнении тестового сценария, или содержащий ошибку в ином случае
      */
     private Optional<Throwable> runTest(Class<?> testSuiteClass,
-                                        Method testMethod,
-                                        Collection<Method> beforeMethods,
-                                        Collection<Method> afterMethods) {
+                                        Method test,
+                                        Collection<Method> beforeEaches,
+                                        Collection<Method> afterEaches) {
 
-        List<Method> methods =
-                Stream.of(beforeMethods, List.of(testMethod), afterMethods)
+        Collection<Method> methods =
+                Stream.of(beforeEaches, List.of(test), afterEaches)
                         .flatMap(Collection::stream)
                         .toList();
 
@@ -104,7 +106,7 @@ public class TestRunner {
                 method.invoke(instance);
             }
         } catch (Throwable e) {
-            error = e;
+            error = Optional.ofNullable(e.getCause()).orElse(e);
         }
 
         return Optional.ofNullable(error);

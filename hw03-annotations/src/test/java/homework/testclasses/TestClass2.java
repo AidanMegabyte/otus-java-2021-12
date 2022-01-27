@@ -1,4 +1,4 @@
-package homework;
+package homework.testclasses;
 
 import homework.annotations.DisplayName;
 import homework.annotations.Test;
