@@ -8,10 +8,8 @@ import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Objects;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -77,10 +75,7 @@ public class TestRunnerTests {
     }
 
     private void assertOutput(ByteArrayOutputStream content, String fixturePath) throws IOException {
-        InputStream fixtureInputStream = Objects.requireNonNull(
-                getClass().getClassLoader().getResourceAsStream(fixturePath)
-        );
-        String expected = IOUtils.toString(fixtureInputStream, StandardCharsets.UTF_8);
+        String expected = IOUtils.resourceToString(fixturePath, StandardCharsets.UTF_8, getClass().getClassLoader());
         String actual = content.toString().trim().replace("\r", "");
         assertThat(actual).isEqualTo(expected);
     }
