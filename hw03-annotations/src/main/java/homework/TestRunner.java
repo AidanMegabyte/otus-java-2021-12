@@ -86,7 +86,7 @@ public class TestRunner {
      * @param testSuiteClass класс набора тестовых сценариев
      * @param test           метод, запускающий тестовый сценарий
      * @param beforeEaches   методы, выполняющиеся перед запуском каждого тестового сценария
-     * @param afterEaches    методы, выполняющиеся после запуска каждого тестового сценария
+     * @param afterEaches    методы, выполняющиеся после завершения каждого тестового сценария
      * @return Optional: пустой при успешном выполнении тестового сценария, или содержащий ошибку в ином случае
      */
     private Optional<Throwable> runTest(Class<?> testSuiteClass,
