@@ -8,6 +8,7 @@ After 2
 Test 2
 Test 3
 TestClass4 > test1 PASSED
+
 Before 1
 Before 2
 Test 1
@@ -18,6 +19,7 @@ After 2
 Test 2
 Test 3
 TestClass4 > test2 PASSED
+
 Before 1
 Before 2
 Test 1
@@ -28,4 +30,5 @@ After 2
 Test 2
 Test 3
 TestClass4 > test3 PASSED
+
 3 test(s) completed, 3 passed, 0 failed

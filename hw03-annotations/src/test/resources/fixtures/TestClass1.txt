@@ -4,10 +4,12 @@ Test 1
 After 1
 After 2
 TestClass1 > test1 PASSED
+
 Before 1
 Before 2
 Test 2
 After 1
 After 2
 TestClass1 > test2 PASSED
+
 2 test(s) completed, 2 passed, 0 failed

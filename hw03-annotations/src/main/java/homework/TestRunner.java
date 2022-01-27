@@ -37,15 +37,15 @@ public class TestRunner {
         for (Method testMethod : testMethods) {
             Optional<Throwable> testResult = runTest(testSuiteClass, testMethod, beforeMethods, afterMethods);
             passedQty += testResult.isEmpty() ? 1 : 0;
-            testResult.ifPresent(System.out::println);
+            testResult.ifPresent(ex -> printError(ex.getCause(), testSuiteClass.getName()));
             String testName = getDisplayName(testMethod, testMethod::getName);
-            System.out.printf("%s > %s %s\n", testSuiteName, testName, (testResult.isEmpty() ? "PASSED" : "FAILED"));
+            System.out.printf("%s > %s %s\n\n", testSuiteName, testName, (testResult.isEmpty() ? "PASSED" : "FAILED"));
         }
 
         // Выводим суммарную статистику выполнения тестовых сценариев
         int totalQty = testMethods.size();
         int failedQty = totalQty - passedQty;
-        System.out.printf("%d test(s) completed, %d passed, %d failed\n", totalQty, passedQty, failedQty);
+        System.out.printf("%d test(s) completed, %d passed, %d failed\n\n", totalQty, passedQty, failedQty);
     }
 
     /**
@@ -108,5 +108,33 @@ public class TestRunner {
         }
 
         return Optional.ofNullable(error);
+    }
+
+    /**
+     * Печать ошибки
+     *
+     * @param ex                 исключение
+     * @param testSuiteClassName название класса с тестовыми сценариями
+     */
+    private void printError(Throwable ex, String testSuiteClassName) {
+
+        StringBuilder sb = new StringBuilder();
+
+        String exClassName = ex.getClass().getName();
+        String message = Optional.ofNullable(ex.getMessage()).orElse("");
+        String colon = message.equals("") ? "" : ":";
+        sb.append(String.format("%s%s%s\n", exClassName, colon, message));
+
+        Optional<StackTraceElement> stackTraceElementOpt = Arrays.stream(ex.getStackTrace())
+                .filter(stackTraceElement -> stackTraceElement.getClassName().equals(testSuiteClassName))
+                .findFirst();
+        stackTraceElementOpt.ifPresent(stackTraceElement -> {
+            String methodName = stackTraceElement.getMethodName();
+            String fileName = stackTraceElement.getFileName();
+            int lineNumber = stackTraceElement.getLineNumber();
+            String at = String.format("    at %s.%s(%s:%d)\n", testSuiteClassName, methodName, fileName, lineNumber);
+            sb.append(at);
+        });
+        System.err.print(sb);
     }
 }
