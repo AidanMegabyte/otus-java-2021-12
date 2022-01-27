@@ -76,6 +76,12 @@ public class TestRunnerTests {
         test(TestClass5.class, "fixtures/TestClass5.txt", errors);
     }
 
+    @Test
+    @DisplayName("Каждый тест выполняется на отдельном экземпляре класса")
+    public void testCreateNewObjectForEachTest() throws IOException {
+        test(TestClass6.class, "fixtures/TestClass6.txt", Collections.emptyList());
+    }
+
     /**
      * Проверка выполнения набора тестовых сценариев
      *
