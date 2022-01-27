@@ -94,7 +94,7 @@ public class TestRunner {
                                         Collection<Method> beforeEaches,
                                         Collection<Method> afterEaches) {
 
-        Collection<Method> methods =
+        List<Method> methods =
                 Stream.of(beforeEaches, List.of(test), afterEaches)
                         .flatMap(Collection::stream)
                         .toList();
