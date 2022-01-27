@@ -38,7 +38,7 @@ public class TestRunner {
             Optional<Throwable> testResult = runTest(testSuiteClass, test, beforeEaches, afterEaches);
             boolean passed = testResult.isEmpty();
             passedQty += passed ? 1 : 0;
-            testResult.ifPresent(ex -> printError(ex, testSuiteClass.getName()));
+            testResult.ifPresent(Throwable::printStackTrace);
             String testName = getDisplayName(test, test::getName);
             String testStatus = passed ? "PASSED" : "FAILED";
             System.out.printf("%s > %s %s\n\n", testSuiteName, testName, testStatus);
@@ -110,33 +110,5 @@ public class TestRunner {
         }
 
         return Optional.ofNullable(error);
-    }
-
-    /**
-     * Печать ошибки
-     *
-     * @param ex                 исключение
-     * @param testSuiteClassName название класса с тестовыми сценариями
-     */
-    private void printError(Throwable ex, String testSuiteClassName) {
-
-        StringBuilder sb = new StringBuilder();
-
-        String exClassName = ex.getClass().getName();
-        String message = Optional.ofNullable(ex.getMessage()).orElse("");
-        String colon = message.equals("") ? "" : ":";
-        sb.append(String.format("%s%s%s\n", exClassName, colon, message));
-
-        Optional<StackTraceElement> stackTraceElementOpt = Arrays.stream(ex.getStackTrace())
-                .filter(stackTraceElement -> stackTraceElement.getClassName().equals(testSuiteClassName))
-                .findFirst();
-        stackTraceElementOpt.ifPresent(stackTraceElement -> {
-            String methodName = stackTraceElement.getMethodName();
-            String fileName = stackTraceElement.getFileName();
-            int lineNumber = stackTraceElement.getLineNumber();
-            String at = String.format("    at %s.%s(%s:%d)\n", testSuiteClassName, methodName, fileName, lineNumber);
-            sb.append(at);
-        });
-        System.err.print(sb);
     }
 }

@@ -1,6 +1,0 @@
-org.opentest4j.AssertionFailedError:
-expected: 2
- but was: 1
-    at homework.testclasses.TestClass5.test1(TestClass5.java:11)
-java.lang.NullPointerException
-    at homework.testclasses.TestClass5.test2(TestClass5.java:16)
