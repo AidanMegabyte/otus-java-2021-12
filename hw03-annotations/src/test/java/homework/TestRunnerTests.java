@@ -26,16 +26,16 @@ public class TestRunnerTests {
     private final PrintStream originalErr = System.err;
 
     // Тестовые потоки вывода (консоль и ошибки)
-    private ByteArrayOutputStream outContent;
-    private ByteArrayOutputStream errContent;
+    private ByteArrayOutputStream testOut;
+    private ByteArrayOutputStream testErr;
 
     @BeforeEach
     public void setUp() {
         // Перед каждым тестом подменяем потоки вывода (консоль и ошибки) на тестовые, для последующей их проверки
-        outContent = new ByteArrayOutputStream();
-        errContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
-        System.setErr(new PrintStream(errContent));
+        testOut = new ByteArrayOutputStream();
+        testErr = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(testOut));
+        System.setErr(new PrintStream(testErr));
     }
 
     @AfterEach
@@ -105,8 +105,9 @@ public class TestRunnerTests {
      * @throws IOException
      */
     private void assertOut(String fixturePath) throws IOException {
-        String expected = IOUtils.resourceToString(fixturePath, StandardCharsets.UTF_8, getClass().getClassLoader());
-        String actual = testOutputStreamAsString(outContent);
+        String rawFixture = IOUtils.resourceToString(fixturePath, StandardCharsets.UTF_8, getClass().getClassLoader());
+        String expected = trimAndRemoveEolChars(rawFixture);
+        String actual = trimAndRemoveEolChars(testOut.toString());
         assertThat(actual).isEqualTo(expected);
     }
 
@@ -116,7 +117,7 @@ public class TestRunnerTests {
      * @param errors список ошибок для проверки
      */
     private void assertErr(Collection<Class<? extends Throwable>> errors) {
-        String err = testOutputStreamAsString(errContent);
+        String err = trimAndRemoveEolChars(testErr.toString());
         if (errors.isEmpty()) {
             assertThat(err).isEmpty();
         } else {
@@ -124,13 +125,7 @@ public class TestRunnerTests {
         }
     }
 
-    /**
-     * Преобразование тестового потока вывода в строку
-     *
-     * @param testOutputStream тестовый поток вывода
-     * @return строковое представление переданного тестового потока вывода
-     */
-    private String testOutputStreamAsString(ByteArrayOutputStream testOutputStream) {
-        return testOutputStream.toString().trim().replace("\r", "");
+    private String trimAndRemoveEolChars(String str) {
+        return str.trim().replaceAll("(\\r|\\n)", "");
     }
 }
