@@ -70,16 +70,23 @@ public class TestRunnerTests {
     }
 
     @Test
-    @DisplayName("Неудачное завершение тестовых сценариев")
+    @DisplayName("Неудачное завершение тестовых сценариев (ошибка в тестовом сценарии)")
     public void testFailureTests() throws IOException {
         List<Class<? extends Throwable>> errors = List.of(AssertionFailedError.class, NullPointerException.class);
         test(TestClass5.class, "fixtures/TestClass5.txt", errors);
     }
 
     @Test
+    @DisplayName("Неудачное завершение тестовых сценариев (ошибка в методах BeforeEach и AfterEach)")
+    public void testFailureBeforesAndAfters() throws IOException {
+        List<Class<? extends Throwable>> errors = List.of(NullPointerException.class, RuntimeException.class);
+        test(TestClass6.class, "fixtures/TestClass6.txt", errors);
+    }
+
+    @Test
     @DisplayName("Каждый тест выполняется на отдельном экземпляре класса")
     public void testCreateNewObjectForEachTest() throws IOException {
-        test(TestClass6.class, "fixtures/TestClass6.txt", Collections.emptyList());
+        test(TestClass7.class, "fixtures/TestClass7.txt", Collections.emptyList());
     }
 
     /**

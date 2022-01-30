@@ -1,10 +1,6 @@
-1
-TestClass6 > test1 PASSED
+Before 1
+After 1
+After 3
+TestClass6 > test FAILED
 
-2
-TestClass6 > test2 PASSED
-
-3
-TestClass6 > test3 PASSED
-
-3 test(s) completed, 3 passed, 0 failed
+1 test(s) completed, 0 passed, 1 failed

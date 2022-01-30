@@ -11,7 +11,6 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class TestRunner {
 
@@ -35,10 +34,10 @@ public class TestRunner {
         // Запускаем тестовые сценарии по очереди с выводом статуса выполнения
         int passedQty = 0;
         for (Method test : tests) {
-            Optional<Throwable> testResult = runTest(testSuiteClass, test, beforeEaches, afterEaches);
+            List<Throwable> testResult = runTest(testSuiteClass, test, beforeEaches, afterEaches);
             boolean passed = testResult.isEmpty();
             passedQty += passed ? 1 : 0;
-            testResult.ifPresent(Throwable::printStackTrace);
+            testResult.forEach(Throwable::printStackTrace);
             String testName = getDisplayName(test, test::getName);
             String testStatus = passed ? "PASSED" : "FAILED";
             System.out.printf("%s > %s %s\n\n", testSuiteName, testName, testStatus);
@@ -87,28 +86,48 @@ public class TestRunner {
      * @param test           метод, запускающий тестовый сценарий
      * @param beforeEaches   методы, выполняющиеся перед запуском каждого тестового сценария
      * @param afterEaches    методы, выполняющиеся после завершения каждого тестового сценария
-     * @return Optional: пустой при успешном выполнении тестового сценария, или содержащий ошибку в ином случае
+     * @return список ошибок, возникших во время выполнения тестового сценария
      */
-    private Optional<Throwable> runTest(Class<?> testSuiteClass,
-                                        Method test,
-                                        Collection<Method> beforeEaches,
-                                        Collection<Method> afterEaches) {
+    private List<Throwable> runTest(Class<?> testSuiteClass,
+                                    Method test,
+                                    Collection<Method> beforeEaches,
+                                    Collection<Method> afterEaches) {
 
-        List<Method> methods =
-                Stream.of(beforeEaches, List.of(test), afterEaches)
-                        .flatMap(Collection::stream)
-                        .toList();
+        List<Throwable> errors = new ArrayList<>();
 
-        Throwable error = null;
+        Object instance;
         try {
-            Object instance = testSuiteClass.getConstructor().newInstance();
-            for (Method method : methods) {
-                method.invoke(instance);
-            }
+            instance = testSuiteClass.getConstructor().newInstance();
         } catch (Throwable e) {
-            error = Optional.ofNullable(e.getCause()).orElse(e);
+            errors.add(Optional.ofNullable(e.getCause()).orElse(e));
+            return errors;
         }
 
-        return Optional.ofNullable(error);
+        // Before-методы выполняются до первой ошибки
+        for (Method method : beforeEaches) {
+            Optional.ofNullable(invokeMethod(method, instance)).ifPresent(errors::add);
+            if (!errors.isEmpty()) {
+                break;
+            }
+        }
+
+        // Если при выполнении before-методов были ошибки, то тестовые сценарии не выполняются
+        if (errors.isEmpty()) {
+            Optional.ofNullable(invokeMethod(test, instance)).ifPresent(errors::add);
+        }
+
+        // After-методы выполняются всегда, ошибка в одном из них не влияет на выполнение другого
+        afterEaches.forEach(method -> Optional.ofNullable(invokeMethod(method, instance)).ifPresent(errors::add));
+
+        return errors;
+    }
+
+    private Throwable invokeMethod(Method method, Object classInstance) {
+        try {
+            method.invoke(classInstance);
+            return null;
+        } catch (Throwable e) {
+            return Optional.ofNullable(e.getCause()).orElse(e);
+        }
     }
 }
