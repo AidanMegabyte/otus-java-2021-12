@@ -1,0 +1,7 @@
+After
+TestClass5 > test1 FAILED
+
+After
+TestClass5 > test2 FAILED
+
+2 test(s) completed, 0 passed, 2 failed

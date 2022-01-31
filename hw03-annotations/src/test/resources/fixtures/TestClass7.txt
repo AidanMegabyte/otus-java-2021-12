@@ -1,0 +1,10 @@
+1
+TestClass7 > test1 PASSED
+
+2
+TestClass7 > test2 PASSED
+
+3
+TestClass7 > test3 PASSED
+
+3 test(s) completed, 3 passed, 0 failed
