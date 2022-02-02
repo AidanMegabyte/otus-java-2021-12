@@ -2,6 +2,7 @@ plugins {
     id "idea"
     id "io.spring.dependency-management" version "${dependencyManagenementVersion}"
     id "com.github.johnrengelman.shadow" version "${shadowVersion}" apply false
+    id "me.champeau.jmh" version "${jmhVersion}" apply false
 }
 
 idea {
