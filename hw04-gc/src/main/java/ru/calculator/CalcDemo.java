@@ -14,7 +14,7 @@ package ru.calculator;
 import java.time.LocalDateTime;
 
 public class CalcDemo {
-    public static void main(String[] args) {
+    public static void main(String ...args) {
         long counter = 100_000_000;
         var summator = new Summator();
         long startTime = System.currentTimeMillis();

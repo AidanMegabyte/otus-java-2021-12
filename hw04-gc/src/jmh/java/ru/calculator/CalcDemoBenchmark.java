@@ -21,53 +21,48 @@ public class CalcDemoBenchmark {
     @Benchmark
     @Fork(jvmArgsPrepend = {"-Xms256m", "-Xmx256m"})
     public void calc_01_256() {
-        calc();
+        CalcDemo.main();
     }
 
     @Benchmark
     @Fork(jvmArgsPrepend = {"-Xms512m", "-Xmx512m"})
     public void calc_02_512() {
-        calc();
+        CalcDemo.main();
     }
 
     @Benchmark
     @Fork(jvmArgsPrepend = {"-Xms768m", "-Xmx768m"})
     public void calc_03_768() {
-        calc();
+        CalcDemo.main();
     }
 
     @Benchmark
     @Fork(jvmArgsPrepend = {"-Xms1024m", "-Xmx1024m"})
     public void calc_04_1024() {
-        calc();
+        CalcDemo.main();
     }
 
     @Benchmark
     @Fork(jvmArgsPrepend = {"-Xms1280m", "-Xmx1280m"})
     public void calc_05_1280() {
-        calc();
+        CalcDemo.main();
     }
 
     @Benchmark
     @Fork(jvmArgsPrepend = {"-Xms1536m", "-Xmx1536m"})
     public void calc_06_1536() {
-        calc();
+        CalcDemo.main();
     }
 
     @Benchmark
     @Fork(jvmArgsPrepend = {"-Xms1792m", "-Xmx1792m"})
     public void calc_07_1792() {
-        calc();
+        CalcDemo.main();
     }
 
     @Benchmark
     @Fork(jvmArgsPrepend = {"-Xms2048m", "-Xmx2048m"})
     public void calc_08_2048() {
-        calc();
-    }
-
-    private void calc() {
-        String[] args = {};
-        CalcDemo.main(args);
+        CalcDemo.main();
     }
 }
