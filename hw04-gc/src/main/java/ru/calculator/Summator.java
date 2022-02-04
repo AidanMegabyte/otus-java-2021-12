@@ -1,6 +1,7 @@
 package ru.calculator;
 
 public class Summator {
+
     private int sum = 0;
     private int prevValue = 0;
     private int prevPrevValue = 0;
@@ -10,14 +11,14 @@ public class Summator {
 
     //!!! сигнатуру метода менять нельзя
     public void calc(Data data) {
+
         size++;
         if (size % 6_600_000 == 0) {
             size = 0;
         }
+
         sum += data.getValue();
-
         sumLastThreeValues = data.getValue() + prevValue + prevPrevValue;
-
         prevPrevValue = prevValue;
         prevValue = data.getValue();
 

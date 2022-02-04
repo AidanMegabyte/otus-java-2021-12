@@ -12,15 +12,17 @@ package ru.calculator;
 import java.time.LocalDateTime;
 
 public class CalcDemo {
+
     public static void main(String... args) {
+
         long counter = 100_000_000;
         var summator = new Summator();
         long startTime = System.currentTimeMillis();
+        var data = new Data(0);
 
         for (var idx = 0; idx < counter; idx++) {
-            var data = new Data(idx);
+            data.setValue(idx);
             summator.calc(data);
-
             if (idx % 10_000_000 == 0) {
                 System.out.println(LocalDateTime.now() + " current idx:" + idx);
             }
