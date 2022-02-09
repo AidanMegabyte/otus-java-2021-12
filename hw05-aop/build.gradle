@@ -5,6 +5,10 @@ plugins {
 sourceCompatibility = JavaVersion.VERSION_17
 targetCompatibility = JavaVersion.VERSION_17
 
+dependencies {
+    implementation 'com.google.guava:guava'
+}
+
 jar {
     manifest {
         attributes 'Main-Class': 'ru.homework.Main'
