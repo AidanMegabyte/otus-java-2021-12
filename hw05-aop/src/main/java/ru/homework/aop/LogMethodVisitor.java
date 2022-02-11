@@ -61,7 +61,7 @@ public class LogMethodVisitor extends AdviceAdapter {
         var argNum = getAccess() == Opcodes.ACC_STATIC ? 0 : 1;
         for (var i = 0; i < argTypes.length; i++) {
             var isObject = argTypes[i].getSort() == Type.OBJECT;
-            var argOpcode = isObject ? Opcodes.ALOAD : argTypes[i].getOpcode(Opcodes.ILOAD);
+            var argOpcode = argTypes[i].getOpcode(Opcodes.ILOAD);
             var argDescriptor = isObject ? Object.class.descriptorString() : argTypes[i].getDescriptor();
             printArg(argNum, argOpcode, argDescriptor);
             printMessage(i == argTypes.length - 1 ? "\n" : ", ");
