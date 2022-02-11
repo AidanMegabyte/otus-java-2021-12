@@ -33,7 +33,6 @@ allprojects {
             dependency "com.google.guava:guava:${guavaVersion}"
             dependency "commons-io:commons-io:${apacheCommonsIoVersion}"
             dependency("org.ow2.asm:asm-commons:${asmVersion}")
-            dependency("com.ea.agentloader:ea-agent-loader:${eaAgentLoaderVersion}")
         }
     }
 
