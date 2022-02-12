@@ -35,5 +35,29 @@ public class Main {
 
         logger.log2(1488);
         System.out.println();
+
+        Logging.logStatic();
+        System.out.println();
+
+        Logging.logStatic(100500);
+        System.out.println();
+
+        Logging.logStatic(100500, 777);
+        System.out.println();
+
+        Logging.logStatic(14.88);
+        System.out.println();
+
+        Logging.logStatic2(777, "abyrvalg");
+        System.out.println();
+
+        Logging.logStatic2(100500, 777L, "abyrvalg");
+        System.out.println();
+
+        Logging.logStatic2(100500, 777, "abyrvalg", true);
+        System.out.println();
+
+        Logging.logStatic2(1488);
+        System.out.println();
     }
 }

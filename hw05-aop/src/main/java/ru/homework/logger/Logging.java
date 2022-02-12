@@ -47,4 +47,48 @@ public class Logging {
     public void log2(int param) {
         System.out.printf("log2: int (%s)%n", param);
     }
+
+    @Log
+    public static void logStatic() {
+        System.out.println("logStatic: no params");
+    }
+
+    @Log
+    public static void logStatic(int param) {
+        System.out.printf("logStatic: int (%s)%n", param);
+    }
+
+    @Log
+    public static void logStatic(int param1, long param2) {
+        System.out.printf("logStatic: int (%s), long (%s)%n", param1, param2);
+    }
+
+    public static void logStatic(double param) {
+        System.out.printf("logStatic: double (%s)%n", param);
+    }
+
+    @Log
+    public static void logStatic2(int param1, String param2) {
+        System.out.printf("logStatic2: int (%s), String (%s)%n", param1, param2);
+    }
+
+    @Log
+    public static void logStatic2(Integer param1, Long param2, String param3) {
+        System.out.printf("logStatic2: Integer (%s), Long (%s), String (%s)%n", param1, param2, param3);
+    }
+
+    @Log
+    public static void logStatic2(Integer param1, long param2, String param3, boolean param4) {
+        System.out.printf(
+                "logStatic2: Integer (%s), long (%s), String (%s), boolean (%s)%n",
+                param1,
+                param2,
+                param3,
+                param4
+        );
+    }
+
+    public static void logStatic2(int param) {
+        System.out.printf("logStatic2: int (%s)%n", param);
+    }
 }

@@ -18,7 +18,9 @@ public class LogMethodVisitor extends AdviceAdapter {
 
     private final String methodName;
 
-    private boolean annotated = false;
+    private final boolean isMethodStatic;
+
+    private boolean isMethodAnnotated = false;
 
     public LogMethodVisitor(int api,
                             MethodVisitor methodVisitor,
@@ -27,19 +29,20 @@ public class LogMethodVisitor extends AdviceAdapter {
                             String descriptor) {
         super(api, methodVisitor, access, name, descriptor);
         this.methodName = name;
+        this.isMethodStatic = (access & Opcodes.ACC_STATIC) == Opcodes.ACC_STATIC;
     }
 
     @Override
     public AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
         // Проверяем, помечен ли текущий метод аннотацией @Log
-        annotated = annotated || Objects.equals(Log.class.descriptorString(), descriptor);
+        isMethodAnnotated = isMethodAnnotated || Objects.equals(Log.class.descriptorString(), descriptor);
         return super.visitAnnotation(descriptor, visible);
     }
 
     @Override
     public void visitInsn(int opcode) {
         // Если происходит возврат из метода, и он помечен аннотацией @Log, то выводим информацию о нем
-        if (opcode >= Opcodes.LRETURN && opcode <= Opcodes.RETURN && annotated) {
+        if (opcode >= Opcodes.LRETURN && opcode <= Opcodes.RETURN && isMethodAnnotated) {
             printMethodInfo();
         }
         super.visitInsn(opcode);
@@ -58,7 +61,7 @@ public class LogMethodVisitor extends AdviceAdapter {
         }
 
         // Если метод не статический, то первый его аргумент - это всегда this, его пропускаем
-        var argNum = getAccess() == Opcodes.ACC_STATIC ? 0 : 1;
+        var argNum = isMethodStatic ? 0 : 1;
         for (var i = 0; i < argTypes.length; i++) {
             var isObject = argTypes[i].getSort() == Type.OBJECT;
             var argOpcode = argTypes[i].getOpcode(Opcodes.ILOAD);
