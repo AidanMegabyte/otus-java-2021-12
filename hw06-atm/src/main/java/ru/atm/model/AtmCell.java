@@ -7,18 +7,28 @@ package ru.atm.model;
  */
 public class AtmCell implements HasCash<Integer> {
 
+    private int banknotesQty = 0;
+
     @Override
     public Integer getCash(int sum) {
-        return null;
+        if (sum < 0) {
+            throw new IllegalArgumentException("Parameter \"sum\" must be a positive integer!");
+        }
+        var result = Math.min(sum, banknotesQty);
+        banknotesQty -= result;
+        return result;
     }
 
     @Override
     public void putCash(Integer cash) {
-
+        if (cash < 0) {
+            throw new IllegalArgumentException("Parameter \"cash\" must be a positive integer!");
+        }
+        banknotesQty += cash;
     }
 
     @Override
     public int getBalance() {
-        return 0;
+        return banknotesQty;
     }
 }
