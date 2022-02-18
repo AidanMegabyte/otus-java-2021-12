@@ -32,6 +32,12 @@ public class AtmCellTests {
     }
 
     @Test
+    @DisplayName("Проверяем, что в ячейку нельзя добавить null купюр")
+    public void testCannotPutNullCash() {
+        assertThatThrownBy(() -> atmCell.putCash(null)).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
     @DisplayName("Проверяем, что в ячейку нельзя добавить отрицательное количество купюр")
     public void testCannotPutNegativeCash() {
         assertThatThrownBy(() -> atmCell.putCash(-1)).isInstanceOf(IllegalArgumentException.class);

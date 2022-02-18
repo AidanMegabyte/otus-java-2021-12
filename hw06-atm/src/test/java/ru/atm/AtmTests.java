@@ -118,11 +118,11 @@ public class AtmTests {
     }
 
     @Test
-    @DisplayName("Проверяем, что в банкомат нельзя внести купюры любого номинала в отрицательном количестве")
+    @DisplayName("Проверяем, что в банкомат нельзя внести купюры любого номинала в количестве < 1")
     public void testCannotPutCashNegativeQty() {
         var cash = new HashMap<Integer, Integer>();
         cash.put(100, 10);
-        cash.put(200, -1);
+        cash.put(200, 0);
         assertThatThrownBy(() -> atm.putCash(cash)).isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -156,6 +156,7 @@ public class AtmTests {
         cash.put(100, 10);
         atm.putCash(cash);
         assertThatThrownBy(() -> atm.getCash(100500)).isInstanceOf(NotEnoughCashException.class);
+        assertThat(atm.getBalance()).isEqualTo(1000);
     }
 
     @Test
@@ -165,5 +166,6 @@ public class AtmTests {
         cashPut.put(200, 10);
         atm.putCash(cashPut);
         assertThatThrownBy(() -> atm.getCash(300)).isInstanceOf(NoRequiredBanknotesException.class);
+        assertThat(atm.getBalance()).isEqualTo(2000);
     }
 }

@@ -2,12 +2,14 @@ package ru.atm.model;
 
 /**
  * Интерфейс для работы с наличными
+ * <p>
+ * При внесении наличных часть их может быть возвращена (причины зависят от конкретной реализации)
  *
- * @param <CashType> тип хранения и выдачи наличных
+ * @param <CashType> формат хранения и выдачи наличных (определяется конкретной реализацией)
  */
 public interface HasCash<CashType> {
 
-    CashType getCash(int sum);
+    CashType getCash(int qty);
 
     CashType putCash(CashType cash);
 
