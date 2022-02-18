@@ -2,22 +2,25 @@ package ru.atm;
 
 import ru.atm.model.Atm;
 import ru.atm.model.AtmCell;
+import ru.atm.model.HasCash;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class AtmDemo {
 
     public static void main(String... args) {
 
-        var atm = new Atm();
+        var atmCells = new HashMap<Integer, HasCash<Integer>>();
+        atmCells.put(100, new AtmCell());
+        atmCells.put(200, new AtmCell());
+        atmCells.put(500, new AtmCell());
+        atmCells.put(1000, new AtmCell());
+        atmCells.put(2000, new AtmCell());
+        atmCells.put(5000, new AtmCell());
 
-        atm.addCell(new AtmCell(), 100);
-        atm.addCell(new AtmCell(), 200);
-        atm.addCell(new AtmCell(), 500);
-        atm.addCell(new AtmCell(), 1000);
-        atm.addCell(new AtmCell(), 2000);
-        atm.addCell(new AtmCell(), 5000);
+        var atm = new Atm(atmCells);
 
         var cashToPut = new HashMap<Integer, Integer>();
         cashToPut.put(100, 10);
@@ -26,17 +29,24 @@ public class AtmDemo {
         cashToPut.put(1000, 40);
         cashToPut.put(2000, 50);
         cashToPut.put(5000, 60);
+        cashToPut.put(777, 70);
 
-        atm.putCash(cashToPut);
+        var returnedCash = atm.putCash(cashToPut);
         System.out.printf("Current ATM balance is %d%n", atm.getBalance());
+        printCash(returnedCash, "Cash returned: ");
 
         var cashToGet = atm.getCash(18800);
+        printCash(cashToGet, "Cash received: ");
+        System.out.printf("Current ATM balance is %d%n", atm.getBalance());
+    }
+
+    private static void printCash(Map<Integer, Integer> cash, String prefix) {
         System.out.printf(
-                "Cash have been got: %s%n",
-                cashToGet.entrySet().stream()
-                        .map(entry -> String.format("%dx%d", entry.getKey(), entry.getValue()))
+                "%s%s%n",
+                prefix,
+                cash.entrySet().stream()
+                        .map(entry -> String.format("%d x %d", entry.getKey(), entry.getValue()))
                         .collect(Collectors.joining(", "))
         );
-        System.out.printf("Current ATM balance is %d%n", atm.getBalance());
     }
 }

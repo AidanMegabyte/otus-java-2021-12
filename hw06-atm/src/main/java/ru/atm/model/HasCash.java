@@ -9,7 +9,7 @@ public interface HasCash<CashType> {
 
     CashType getCash(int sum);
 
-    void putCash(CashType cash);
+    CashType putCash(CashType cash);
 
     int getBalance();
 }

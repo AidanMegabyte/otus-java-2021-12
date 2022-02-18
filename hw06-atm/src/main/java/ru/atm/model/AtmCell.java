@@ -23,11 +23,12 @@ public class AtmCell implements HasCash<Integer> {
     }
 
     @Override
-    public void putCash(Integer cash) {
+    public Integer putCash(Integer cash) {
         if (cash < 0) {
             throw new IllegalArgumentException("Parameter \"cash\" must be a positive integer!");
         }
         banknotesQty += cash;
+        return 0;
     }
 
     @Override

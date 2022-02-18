@@ -27,7 +27,7 @@ public class AtmCellTests {
     @Test
     @DisplayName("Проверяем, что в ячейку можно добавить купюры")
     public void testCanPutCash() {
-        atmCell.putCash(100500);
+        assertThat(atmCell.putCash(100500)).isEqualTo(0);
         assertThat(atmCell.getBalance()).isEqualTo(100500);
     }
 
