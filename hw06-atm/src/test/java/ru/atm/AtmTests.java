@@ -3,8 +3,7 @@ package ru.atm;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import ru.atm.exception.NoRequiredBanknotesException;
-import ru.atm.exception.NotEnoughCashException;
+import ru.atm.exception.AtmException;
 import ru.atm.model.Atm;
 import ru.atm.model.AtmCell;
 import ru.atm.model.HasCash;
@@ -151,11 +150,11 @@ public class AtmTests {
     @Test
     @DisplayName("Проверяем, что из банкомата нельзя получить денег больше, чем в нем есть")
     public void testCannotGetCashMoreThanExists() {
-        assertThatThrownBy(() -> atm.getCash(1)).isInstanceOf(NotEnoughCashException.class);
+        assertThatThrownBy(() -> atm.getCash(1)).isInstanceOf(AtmException.class);
         var cash = new HashMap<Integer, Integer>();
         cash.put(100, 10);
         atm.putCash(cash);
-        assertThatThrownBy(() -> atm.getCash(100500)).isInstanceOf(NotEnoughCashException.class);
+        assertThatThrownBy(() -> atm.getCash(100500)).isInstanceOf(AtmException.class);
         assertThat(atm.getBalance()).isEqualTo(1000);
     }
 
@@ -165,7 +164,7 @@ public class AtmTests {
         var cashPut = new HashMap<Integer, Integer>();
         cashPut.put(200, 10);
         atm.putCash(cashPut);
-        assertThatThrownBy(() -> atm.getCash(300)).isInstanceOf(NoRequiredBanknotesException.class);
+        assertThatThrownBy(() -> atm.getCash(300)).isInstanceOf(AtmException.class);
         assertThat(atm.getBalance()).isEqualTo(2000);
     }
 }

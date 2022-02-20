@@ -1,7 +1,6 @@
 package ru.atm.model;
 
-import ru.atm.exception.NoRequiredBanknotesException;
-import ru.atm.exception.NotEnoughCashException;
+import ru.atm.exception.AtmException;
 
 import java.util.*;
 
@@ -39,7 +38,7 @@ public class Atm implements HasCash<Map<Integer, Integer>> {
     public Map<Integer, Integer> getCash(int qty) {
 
         if (qty > getBalance()) {
-            throw new NotEnoughCashException("Not enough cash in ATM!");
+            throw new AtmException("Not enough cash in ATM!");
         }
 
         var result = new TreeMap<Integer, Integer>(Collections.reverseOrder());
@@ -55,7 +54,7 @@ public class Atm implements HasCash<Map<Integer, Integer>> {
 
         if (currentSum > 0) {
             result.forEach((denomination, banknotesQty) -> cells.get(denomination).putCash(banknotesQty));
-            throw new NoRequiredBanknotesException("Cannot get required sum by ATM's current banknotes!");
+            throw new AtmException("Cannot get required sum by ATM's current banknotes!");
         }
 
         return result;
