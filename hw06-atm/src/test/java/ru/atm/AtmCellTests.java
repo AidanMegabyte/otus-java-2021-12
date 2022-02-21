@@ -21,49 +21,43 @@ public class AtmCellTests {
     @Test
     @DisplayName("Проверяем, что ячейка создается пустой")
     public void testIsEmptyAfterCreation() {
-        assertThat(atmCell.getBalance()).isEqualTo(0);
+        assertThat(atmCell.getBanknotesQty()).isEqualTo(0);
     }
 
     @Test
     @DisplayName("Проверяем, что в ячейку можно добавить купюры")
     public void testCanPutCash() {
-        assertThat(atmCell.putCash(100500)).isEqualTo(0);
-        assertThat(atmCell.getBalance()).isEqualTo(100500);
-    }
-
-    @Test
-    @DisplayName("Проверяем, что в ячейку нельзя добавить null купюр")
-    public void testCannotPutNullCash() {
-        assertThatThrownBy(() -> atmCell.putCash(null)).isInstanceOf(IllegalArgumentException.class);
+        atmCell.putBanknotes(100500);
+        assertThat(atmCell.getBanknotesQty()).isEqualTo(100500);
     }
 
     @Test
     @DisplayName("Проверяем, что в ячейку нельзя добавить отрицательное количество купюр")
     public void testCannotPutNegativeCash() {
-        assertThatThrownBy(() -> atmCell.putCash(-1)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> atmCell.putBanknotes(-1)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     @DisplayName("Проверяем, что из ячейки можно получить купюры")
     public void testCanGetCash() {
-        atmCell.putCash(100500);
-        var cash = atmCell.getCash(777);
-        assertThat(cash).isEqualTo(777);
-        assertThat(atmCell.getBalance()).isEqualTo(99723);
+        atmCell.putBanknotes(100500);
+        var banknotesGotQty = atmCell.getBanknotes(777);
+        assertThat(banknotesGotQty).isEqualTo(777);
+        assertThat(atmCell.getBanknotesQty()).isEqualTo(99723);
     }
 
     @Test
     @DisplayName("Проверяем, что из ячейки нельзя получить отрицательное количество купюр")
     public void testCannotGetNegativeCash() {
-        assertThatThrownBy(() -> atmCell.getCash(-1)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> atmCell.getBanknotes(-1)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     @DisplayName("Проверяем, что из ячейки нельзя получить купюр больше, чем в ней есть")
     public void testCannotGetCashMoreThanExists() {
-        atmCell.putCash(777);
-        var cash = atmCell.getCash(100500);
-        assertThat(cash).isEqualTo(777);
-        assertThat(atmCell.getBalance()).isEqualTo(0);
+        atmCell.putBanknotes(777);
+        var banknotesGotQty = atmCell.getBanknotes(100500);
+        assertThat(banknotesGotQty).isEqualTo(777);
+        assertThat(atmCell.getBanknotesQty()).isEqualTo(0);
     }
 }

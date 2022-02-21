@@ -2,18 +2,16 @@ package ru.atm.model;
 
 /**
  * Ячейка банкомата, хранящая купюры одного номинала
- * <p>
- * Формат хранения и выдачи наличных - количество купюр
  */
-public class AtmCell implements HasCash<Integer> {
+public class AtmCell implements HasSameDenominationBanknotes {
 
     private int banknotesQty = 0;
 
     @Override
-    public Integer getCash(int qty) {
+    public int getBanknotes(int qty) {
 
         if (qty < 0) {
-            throw new IllegalArgumentException("Parameter \"sum\" must be a positive integer!");
+            throw new IllegalArgumentException("Parameter \"qty\" must be a positive integer!");
         }
 
         var result = Math.min(qty, banknotesQty);
@@ -23,22 +21,15 @@ public class AtmCell implements HasCash<Integer> {
     }
 
     @Override
-    public Integer putCash(Integer cash) {
-
-        if (cash == null) {
-            throw new IllegalArgumentException("Parameter \"cash\" cannot be null!");
+    public void putBanknotes(int qty) {
+        if (qty < 0) {
+            throw new IllegalArgumentException("Parameter \"qty\" must be a positive integer!");
         }
-        if (cash < 0) {
-            throw new IllegalArgumentException("Parameter \"cash\" must be a positive integer!");
-        }
-
-        banknotesQty += cash;
-        // Здесь возврата непринятых купюр не предполагается
-        return 0;
+        banknotesQty += qty;
     }
 
     @Override
-    public int getBalance() {
+    public int getBanknotesQty() {
         return banknotesQty;
     }
 }

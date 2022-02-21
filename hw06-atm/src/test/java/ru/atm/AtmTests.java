@@ -6,7 +6,8 @@ import org.junit.jupiter.api.Test;
 import ru.atm.exception.AtmException;
 import ru.atm.model.Atm;
 import ru.atm.model.AtmCell;
-import ru.atm.model.HasCash;
+import ru.atm.model.BanknoteDenomination;
+import ru.atm.model.HasSameDenominationBanknotes;
 
 import java.util.HashMap;
 
@@ -20,13 +21,13 @@ public class AtmTests {
 
     @BeforeEach
     public void init() {
-        var atmCells = new HashMap<Integer, HasCash<Integer>>();
-        atmCells.put(100, new AtmCell());
-        atmCells.put(200, new AtmCell());
-        atmCells.put(500, new AtmCell());
-        atmCells.put(1000, new AtmCell());
-        atmCells.put(2000, new AtmCell());
-        atmCells.put(5000, new AtmCell());
+        var atmCells = new HashMap<BanknoteDenomination, HasSameDenominationBanknotes>();
+        atmCells.put(BanknoteDenomination.ONE_HUNDRED, new AtmCell());
+        atmCells.put(BanknoteDenomination.TWO_HUNDREDS, new AtmCell());
+        atmCells.put(BanknoteDenomination.FIVE_HUNDREDS, new AtmCell());
+        atmCells.put(BanknoteDenomination.ONE_THOUSAND, new AtmCell());
+        atmCells.put(BanknoteDenomination.TWO_THOUSANDS, new AtmCell());
+        atmCells.put(BanknoteDenomination.FIVE_THOUSANDS, new AtmCell());
         atm = new Atm(atmCells);
     }
 
@@ -40,24 +41,16 @@ public class AtmTests {
     @Test
     @DisplayName("Проверяем, что в банкомат нельзя добавить ячейку для номинала купюры = null")
     public void testCannotAddCellForNullDenomination() {
-        var atmCells = new HashMap<Integer, HasCash<Integer>>();
+        var atmCells = new HashMap<BanknoteDenomination, HasSameDenominationBanknotes>();
         atmCells.put(null, new AtmCell());
-        assertThatThrownBy(() -> new Atm(atmCells)).isInstanceOf(IllegalArgumentException.class);
-    }
-
-    @Test
-    @DisplayName("Проверяем, что в банкомат нельзя добавить ячейку для номинала купюры < 1")
-    public void testCannotAddCellForDenominationLessThan1() {
-        var atmCells = new HashMap<Integer, HasCash<Integer>>();
-        atmCells.put(0, new AtmCell());
         assertThatThrownBy(() -> new Atm(atmCells)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     @DisplayName("Проверяем, что в банкомат нельзя добавить null в качестве ячейки")
     public void testCannotAddNullCell() {
-        var atmCells = new HashMap<Integer, HasCash<Integer>>();
-        atmCells.put(100, null);
+        var atmCells = new HashMap<BanknoteDenomination, HasSameDenominationBanknotes>();
+        atmCells.put(BanknoteDenomination.ONE_HUNDRED, null);
         assertThatThrownBy(() -> new Atm(atmCells)).isInstanceOf(IllegalArgumentException.class);
     }
 

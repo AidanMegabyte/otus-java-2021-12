@@ -2,7 +2,8 @@ package ru.atm;
 
 import ru.atm.model.Atm;
 import ru.atm.model.AtmCell;
-import ru.atm.model.HasCash;
+import ru.atm.model.BanknoteDenomination;
+import ru.atm.model.HasSameDenominationBanknotes;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,13 +13,13 @@ public class AtmDemo {
 
     public static void main(String... args) {
 
-        var atmCells = new HashMap<Integer, HasCash<Integer>>();
-        atmCells.put(100, new AtmCell());
-        atmCells.put(200, new AtmCell());
-        atmCells.put(500, new AtmCell());
-        atmCells.put(1000, new AtmCell());
-        atmCells.put(2000, new AtmCell());
-        atmCells.put(5000, new AtmCell());
+        var atmCells = new HashMap<BanknoteDenomination, HasSameDenominationBanknotes>();
+        atmCells.put(BanknoteDenomination.ONE_HUNDRED, new AtmCell());
+        atmCells.put(BanknoteDenomination.TWO_HUNDREDS, new AtmCell());
+        atmCells.put(BanknoteDenomination.FIVE_HUNDREDS, new AtmCell());
+        atmCells.put(BanknoteDenomination.ONE_THOUSAND, new AtmCell());
+        atmCells.put(BanknoteDenomination.TWO_THOUSANDS, new AtmCell());
+        atmCells.put(BanknoteDenomination.FIVE_THOUSANDS, new AtmCell());
 
         var atm = new Atm(atmCells);
 
