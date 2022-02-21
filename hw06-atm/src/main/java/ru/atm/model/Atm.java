@@ -33,14 +33,14 @@ public class Atm implements HasCash {
     }
 
     @Override
-    public Map<Integer, Integer> getCash(int qty) {
+    public Map<Integer, Integer> getCash(int sum) {
 
-        if (qty > getBalance()) {
+        if (sum > getBalance()) {
             throw new AtmException("Not enough cash in ATM!");
         }
 
         var result = new HashMap<Integer, Integer>();
-        int currentSum = qty;
+        int currentSum = sum;
         for (BanknoteDenomination banknoteDenomination : cells.keySet()) {
             var cell = cells.get(banknoteDenomination);
             var denomination = banknoteDenomination.getDenomination();
