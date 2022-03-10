@@ -18,7 +18,6 @@ public class ProcessorSwapField11And12Test {
     public void swapTest() {
         var message1 = new Message.Builder(1L).field11("field11").field12("field12").build();
         var message2 = processor.process(message1);
-        assertThat(message1.toString()).isNotEqualTo(message2.toString());
         assertThat(message1.getField11()).isEqualTo(message2.getField12());
         assertThat(message1.getField12()).isEqualTo(message2.getField11());
     }
