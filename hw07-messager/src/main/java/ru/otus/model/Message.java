@@ -17,8 +17,6 @@ public class Message {
     private final String field12;
     private final ObjectForMessage field13;
 
-    //todo: 1. Добавить поля field11 - field13 (для field13 используйте класс ObjectForMessage)
-
     private Message(long id,
                     String field1,
                     String field2,
