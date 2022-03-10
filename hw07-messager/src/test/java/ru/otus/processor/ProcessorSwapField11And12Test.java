@@ -3,6 +3,7 @@ package ru.otus.processor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.otus.model.Message;
+import ru.otus.processor.homework.ProcessorSwapField11And12;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
