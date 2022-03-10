@@ -16,8 +16,7 @@ public class ProcessorThrowExceptionEvenSecondTest {
     @Test
     @DisplayName("Проверяем выброс исключения в четную секунду")
     public void evenSecondTest() {
-        var localDateTime = LocalDateTime.now().withSecond(2);
-        var processor = new ProcessorThrowExceptionEvenSecond(() -> localDateTime);
+        var processor = new ProcessorThrowExceptionEvenSecond(() -> LocalDateTime.now().withSecond(2));
         assertThatExceptionOfType(EvenSecondException.class).isThrownBy(() -> processor.process(null));
     }
 
@@ -25,8 +24,7 @@ public class ProcessorThrowExceptionEvenSecondTest {
     @DisplayName("Проверяем возврат сообщения в нечетную секунду")
     public void oddSecondTest() {
         var message = new Message.Builder(1L).field1("abyrvalg").build();
-        var localDateTime = LocalDateTime.now().withSecond(1);
-        var processor = new ProcessorThrowExceptionEvenSecond(() -> localDateTime);
+        var processor = new ProcessorThrowExceptionEvenSecond(() -> LocalDateTime.now().withSecond(1));
         assertThat(processor.process(message)).isEqualTo(message);
         assertThat(processor.process(message).toString()).isEqualTo(message.toString());
     }

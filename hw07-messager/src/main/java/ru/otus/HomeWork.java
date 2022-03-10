@@ -14,14 +14,13 @@ public class HomeWork {
 
     public static void main(String[] args) {
 
-        var localDateTime = LocalDateTime.now().withSecond(1);
         var processors = List.of(
                 new ProcessorSwapField11And12(),
-                new ProcessorThrowExceptionEvenSecond(() -> localDateTime)
+                new ProcessorThrowExceptionEvenSecond(() -> LocalDateTime.now().withSecond(1)),
+                new ProcessorThrowExceptionEvenSecond(() -> LocalDateTime.now().withSecond(2))
         );
 
-        var complexProcessor = new ComplexProcessor(processors, ex -> {
-        });
+        var complexProcessor = new ComplexProcessor(processors, ex -> System.out.printf("%nSome shit happened!%n%s%n%n", ex));
 
         var listenerPrinter = new ListenerPrinterConsole();
         var historyListener = new HistoryListener();
