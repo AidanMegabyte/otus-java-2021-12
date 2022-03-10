@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-@DisplayName("Тесты процессора, который выбрасывает исключение в четную секунду")
 public class ProcessorThrowExceptionEvenSecondTest {
 
     @Test

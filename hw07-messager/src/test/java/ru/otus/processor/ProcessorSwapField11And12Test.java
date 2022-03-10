@@ -8,7 +8,6 @@ import ru.otus.processor.homework.ProcessorSwapField11And12;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-@DisplayName("Тесты процессора, который поменяет местами значения field11 и field12")
 public class ProcessorSwapField11And12Test {
 
     private final Processor processor = new ProcessorSwapField11And12();
