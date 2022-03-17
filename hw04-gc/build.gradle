@@ -1,20 +1,20 @@
 plugins {
-    id 'java'
-    id 'me.champeau.jmh'
+    id "java"
+    id "me.champeau.jmh"
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
 targetCompatibility = JavaVersion.VERSION_17
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api'
-    testImplementation 'org.junit.jupiter:junit-jupiter-engine'
-    testImplementation 'org.assertj:assertj-core'
+    testImplementation "org.junit.jupiter:junit-jupiter-api"
+    testImplementation "org.junit.jupiter:junit-jupiter-engine"
+    testImplementation "org.assertj:assertj-core"
 }
 
 jar {
     manifest {
-        attributes('Main-Class': 'ru.calculator.CalcDemo')
+        attributes("Main-Class": "ru.calculator.CalcDemo")
     }
 }
 
@@ -27,6 +27,6 @@ test {
 
 tasks.withType(JavaCompile) {
     options.with {
-        encoding = 'UTF-8'
+        encoding = "UTF-8"
     }
 }

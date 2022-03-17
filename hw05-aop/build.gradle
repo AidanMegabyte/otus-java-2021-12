@@ -1,27 +1,27 @@
 plugins {
-    id 'java'
-    id 'com.github.johnrengelman.shadow'
+    id "java"
+    id "com.github.johnrengelman.shadow"
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
 targetCompatibility = JavaVersion.VERSION_17
 
 dependencies {
-    implementation 'org.ow2.asm:asm-commons'
+    implementation "org.ow2.asm:asm-commons"
 }
 
 tasks.withType(JavaCompile) {
     options.with {
-        encoding = 'UTF-8'
+        encoding = "UTF-8"
     }
 }
 
 shadowJar {
-    archiveBaseName.set('hw05-aop')
-    archiveClassifier.set('')
+    archiveBaseName.set("hw05-aop")
+    archiveClassifier.set("")
     manifest {
-        attributes 'Main-Class': 'ru.homework.Main'
-        attributes 'Premain-Class': 'ru.homework.Premain'
+        attributes "Main-Class": "ru.homework.Main"
+        attributes "Premain-Class": "ru.homework.Premain"
     }
 }
 
