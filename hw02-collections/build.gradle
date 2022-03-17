@@ -1,16 +1,14 @@
 plugins {
-    id 'java'
+    id "java"
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
 targetCompatibility = JavaVersion.VERSION_17
 
 dependencies {
-    testImplementation('org.junit.jupiter:junit-jupiter-api')
-    testImplementation('org.junit.jupiter:junit-jupiter-engine')
-    testImplementation('org.assertj:assertj-core')
-    testImplementation('org.mockito:mockito-core')
-    testImplementation('org.mockito:mockito-junit-jupiter')
+    testImplementation "org.junit.jupiter:junit-jupiter-api"
+    testImplementation "org.junit.jupiter:junit-jupiter-engine"
+    testImplementation "org.assertj:assertj-core"
 }
 
 test {
@@ -22,6 +20,6 @@ test {
 
 tasks.withType(JavaCompile) {
     options.with {
-        encoding = 'UTF-8'
+        encoding = "UTF-8"
     }
 }
