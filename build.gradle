@@ -40,6 +40,5 @@ allprojects {
         resolutionStrategy {
             failOnVersionConflict()
         }
-        resolutionStrategy {
     }
 }
