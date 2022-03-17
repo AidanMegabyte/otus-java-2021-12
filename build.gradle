@@ -33,12 +33,17 @@ allprojects {
             dependency "com.google.guava:guava:${guavaVersion}"
             dependency "commons-io:commons-io:${apacheCommonsIoVersion}"
             dependency("org.ow2.asm:asm-commons:${asmVersion}")
+            dependency("org.glassfish:javax.json:${glassfishJsonVersion}")
+            dependency("com.google.protobuf:protobuf-java-util:${protobufVersion}")
         }
     }
 
     configurations.all {
         resolutionStrategy {
             failOnVersionConflict()
+        }
+        resolutionStrategy {
+            force("com.google.errorprone:error_prone_annotations:2.11.0")
         }
     }
 }
