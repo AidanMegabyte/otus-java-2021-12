@@ -1,8 +1,11 @@
 package ru.otus.crm.model;
 
 public class Manager {
+
     private Long no;
+
     private String label;
+
     private String param1;
 
     public Manager() {

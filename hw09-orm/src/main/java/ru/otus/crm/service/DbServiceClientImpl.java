@@ -10,9 +10,11 @@ import java.util.List;
 import java.util.Optional;
 
 public class DbServiceClientImpl implements DBServiceClient {
+
     private static final Logger log = LoggerFactory.getLogger(DbServiceClientImpl.class);
 
     private final DataTemplate<Client> dataTemplate;
+
     private final TransactionRunner transactionRunner;
 
     public DbServiceClientImpl(TransactionRunner transactionRunner, DataTemplate<Client> dataTemplate) {
@@ -50,6 +52,6 @@ public class DbServiceClientImpl implements DBServiceClient {
             var clientList = dataTemplate.findAll(connection);
             log.info("clientList:{}", clientList);
             return clientList;
-       });
+        });
     }
 }

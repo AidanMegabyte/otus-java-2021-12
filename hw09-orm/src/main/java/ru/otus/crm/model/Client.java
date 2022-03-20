@@ -1,7 +1,9 @@
 package ru.otus.crm.model;
 
 public class Client {
+
     private Long id;
+
     private String name;
 
     public Client() {

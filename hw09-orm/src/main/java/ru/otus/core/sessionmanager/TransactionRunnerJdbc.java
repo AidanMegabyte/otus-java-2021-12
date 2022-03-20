@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.concurrent.Callable;
 
 public class TransactionRunnerJdbc implements TransactionRunner {
+
     private final DataSource dataSource;
 
     public TransactionRunnerJdbc(DataSource dataSource) {

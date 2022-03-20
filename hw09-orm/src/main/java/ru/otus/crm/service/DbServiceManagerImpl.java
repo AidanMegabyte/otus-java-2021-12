@@ -10,9 +10,11 @@ import java.util.List;
 import java.util.Optional;
 
 public class DbServiceManagerImpl implements DBServiceManager {
+
     private static final Logger log = LoggerFactory.getLogger(DbServiceManagerImpl.class);
 
     private final DataTemplate<Manager> managerDataTemplate;
+
     private final TransactionRunner transactionRunner;
 
     public DbServiceManagerImpl(TransactionRunner transactionRunner, DataTemplate<Manager> managerDataTemplate) {
@@ -50,6 +52,6 @@ public class DbServiceManagerImpl implements DBServiceManager {
             var managerList = managerDataTemplate.findAll(connection);
             log.info("managerList:{}", managerList);
             return managerList;
-       });
+        });
     }
 }
