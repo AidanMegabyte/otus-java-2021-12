@@ -26,7 +26,7 @@ public class EntityClassMetaDataImpl<T> implements EntityClassMetaData<T> {
             throw new IllegalArgumentException("Type cannot be null!");
         }
         try {
-            this.name = type.getName();
+            this.name = type.getSimpleName();
             this.constructor = type.getConstructor();
             this.fields = Arrays.asList(type.getDeclaredFields());
             this.idField = this.fields.stream()

@@ -31,7 +31,7 @@ public class EntityClassMetaDataImplTests {
                 .collect(Collectors.joining());
         var fieldNamesWithoutId = allFieldNames.replace(idFieldName, "");
 
-        assertThat(name).isEqualTo(TestModel.class.getName());
+        assertThat(name).isEqualTo(TestModel.class.getSimpleName());
         assertThat(constructorParameterCount).isZero();
         assertThat(idFieldName).isEqualTo("a");
         assertThat(allFieldNames).isEqualTo("abcd");
