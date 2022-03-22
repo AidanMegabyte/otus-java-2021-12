@@ -1,4 +1,4 @@
-package ru.otus.core.sessionmanager;
+package ru.otus.exception;
 
 public class DataBaseOperationException extends RuntimeException {
 

@@ -1,6 +1,6 @@
 package ru.otus.core.repository.executor;
 
-import ru.otus.core.sessionmanager.DataBaseOperationException;
+import ru.otus.exception.DataBaseOperationException;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

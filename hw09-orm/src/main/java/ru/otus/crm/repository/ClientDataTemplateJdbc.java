@@ -1,7 +1,7 @@
 package ru.otus.crm.repository;
 
 import ru.otus.core.repository.DataTemplate;
-import ru.otus.core.repository.DataTemplateException;
+import ru.otus.exception.DataTemplateException;
 import ru.otus.core.repository.executor.DbExecutor;
 import ru.otus.crm.model.Client;
 

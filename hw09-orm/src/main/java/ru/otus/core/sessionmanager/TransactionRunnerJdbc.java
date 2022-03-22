@@ -1,5 +1,7 @@
 package ru.otus.core.sessionmanager;
 
+import ru.otus.exception.DataBaseOperationException;
+
 import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.util.concurrent.Callable;
