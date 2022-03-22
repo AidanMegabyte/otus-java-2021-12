@@ -29,7 +29,10 @@ public class EntityClassMetaDataImplTests {
                 .map(Field::getName)
                 .sorted()
                 .collect(Collectors.joining());
-        var fieldNamesWithoutId = allFieldNames.replace(idFieldName, "");
+        var fieldNamesWithoutId = entityClassMetaData.getFieldsWithoutId().stream()
+                .map(Field::getName)
+                .sorted()
+                .collect(Collectors.joining());
 
         assertThat(name).isEqualTo(TestModel.class.getSimpleName());
         assertThat(constructorParameterCount).isZero();
