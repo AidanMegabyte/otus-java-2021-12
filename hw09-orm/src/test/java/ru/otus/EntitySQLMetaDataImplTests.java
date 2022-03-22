@@ -20,9 +20,9 @@ public class EntitySQLMetaDataImplTests {
         EntityClassMetaData<TestModel> entityClassMetaData = new EntityClassMetaDataImpl<>(TestModel.class);
         EntitySQLMetaData entitySQLMetaData = new EntitySQLMetaDataImpl(entityClassMetaData);
         var selectAllSql = "select * from testmodel";
-        var selectByIdSql = "select * from testmodel where a = :a";
-        var insertSql = "insert into testmodel(b, c, d) values (:b, :c, :d)";
-        var updateSql = "update testmodel set b = :b, c = :c, d = :d where a = :a";
+        var selectByIdSql = "select * from testmodel where a = ?";
+        var insertSql = "insert into testmodel(b, c, d) values (?, ?, ?)";
+        var updateSql = "update testmodel set b = ?, c = ?, d = ? where a = ?";
 
         assertThat(entitySQLMetaData.getSelectAllSql()).isEqualTo(selectAllSql);
         assertThat(entitySQLMetaData.getSelectByIdSql()).isEqualTo(selectByIdSql);

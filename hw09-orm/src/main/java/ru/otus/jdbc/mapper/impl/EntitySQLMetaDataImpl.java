@@ -4,6 +4,7 @@ import ru.otus.jdbc.mapper.EntityClassMetaData;
 import ru.otus.jdbc.mapper.EntitySQLMetaData;
 
 import java.lang.reflect.Field;
+import java.util.Collections;
 import java.util.stream.Collectors;
 
 public class EntitySQLMetaDataImpl implements EntitySQLMetaData {
@@ -28,7 +29,6 @@ public class EntitySQLMetaDataImpl implements EntitySQLMetaData {
         return String.format(
                 SqlQueryFormats.SELECT_BY_ID_SQL_FORMAT,
                 entityClassMetaData.getName().toLowerCase(),
-                idFieldName,
                 idFieldName
         );
     }
@@ -39,9 +39,7 @@ public class EntitySQLMetaDataImpl implements EntitySQLMetaData {
                 .map(Field::getName)
                 .sorted()
                 .toList();
-        var params = fieldNames.stream()
-                .map(fieldName -> String.format(":%s", fieldName))
-                .toList();
+        var params = Collections.nCopies(fieldNames.size(), "?");
         return String.format(
                 SqlQueryFormats.INSERT_SQL_FORMAT,
                 entityClassMetaData.getName().toLowerCase(),
@@ -55,7 +53,7 @@ public class EntitySQLMetaDataImpl implements EntitySQLMetaData {
         var fieldsSetPartSql = entityClassMetaData.getFieldsWithoutId().stream()
                 .map(field -> {
                     var fieldName = field.getName();
-                    return String.format("%s = :%s", fieldName, fieldName);
+                    return String.format("%s = ?", fieldName);
                 })
                 .sorted()
                 .collect(Collectors.joining(", "));
@@ -64,15 +62,14 @@ public class EntitySQLMetaDataImpl implements EntitySQLMetaData {
                 SqlQueryFormats.UPDATE_SQL_FORMAT,
                 entityClassMetaData.getName().toLowerCase(),
                 fieldsSetPartSql,
-                idFieldName,
                 idFieldName
         );
     }
 
     private static class SqlQueryFormats {
         public static final String SELECT_ALL_SQL_FORMAT = "select * from %s";
-        public static final String SELECT_BY_ID_SQL_FORMAT = "select * from %s where %s = :%s";
+        public static final String SELECT_BY_ID_SQL_FORMAT = "select * from %s where %s = ?";
         public static final String INSERT_SQL_FORMAT = "insert into %s(%s) values (%s)";
-        public static final String UPDATE_SQL_FORMAT = "update %s set %s where %s = :%s";
+        public static final String UPDATE_SQL_FORMAT = "update %s set %s where %s = ?";
     }
 }
