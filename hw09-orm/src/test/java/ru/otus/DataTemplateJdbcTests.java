@@ -56,8 +56,10 @@ public class DataTemplateJdbcTests {
     @Test
     @DisplayName("Проверка поиска по ID")
     public void testFindById() throws SQLException {
+
         var testModelExpected = new TestModel(1, true, "name1", 1.11);
         var testModelActualOpt = dataTemplate.findById(makeConnection(), testModelExpected.getA());
+
         assertThat(testModelActualOpt).isPresent();
         assertThat(testModelActualOpt.get()).isEqualTo(testModelExpected);
     }
@@ -72,6 +74,7 @@ public class DataTemplateJdbcTests {
     @Test
     @DisplayName("Проверка получения всех записей")
     public void testFindAll() throws SQLException {
+
         var testModelsExpected = List.of(
                 new TestModel(1, true, "name1", 1.11),
                 new TestModel(2, false, "name2", 2.22),
@@ -79,18 +82,21 @@ public class DataTemplateJdbcTests {
                 new TestModel(4, false, "name4", 4.44)
         );
         var testModelsActual = dataTemplate.findAll(makeConnection());
+
         assertThat(testModelsActual).isEqualTo(testModelsExpected);
     }
 
     @Test
     @DisplayName("Проверка вставки")
     public void testInsert() throws SQLException {
+
         var connection = makeConnection();
         var idExpected = 5;
         var testModel = new TestModel(0, true, "name5", 5.55);
         var testModelExpected = new TestModel(idExpected, testModel.isB(), testModel.getC(), testModel.getD());
         var idActual = dataTemplate.insert(connection, testModel);
         var testModelActualOpt = dataTemplate.findById(makeConnection(), idExpected);
+
         assertThat(idActual).isEqualTo(idExpected);
         assertThat(testModelActualOpt).isPresent();
         assertThat(testModelActualOpt.get()).isEqualTo(testModelExpected);
@@ -99,9 +105,11 @@ public class DataTemplateJdbcTests {
     @Test
     @DisplayName("Проверка вставки - пустое поле \"name\"")
     public void testInsertEmptyName() throws SQLException {
+
         var connection = makeConnection();
         var sizeExpected = dataTemplate.findAll(connection).size();
         var testModel = new TestModel(0, true, null, 5.55);
+
         assertThatThrownBy(() -> dataTemplate.insert(connection, testModel))
                 .isInstanceOf(DataTemplateException.class);
         assertThat(dataTemplate.findAll(connection).size()).isEqualTo(sizeExpected);
@@ -110,9 +118,11 @@ public class DataTemplateJdbcTests {
     @Test
     @DisplayName("Проверка обновления")
     public void testUpdate() throws SQLException {
+
         var testModelExpected = new TestModel(4, false, "abyrvalg", 4.44);
         dataTemplate.update(makeConnection(), testModelExpected);
         var testModelActualOpt = dataTemplate.findById(makeConnection(), testModelExpected.getA());
+
         assertThat(testModelActualOpt).isPresent();
         assertThat(testModelActualOpt.get()).isEqualTo(testModelExpected);
     }
@@ -120,26 +130,32 @@ public class DataTemplateJdbcTests {
     @Test
     @DisplayName("Проверка обновления - пустое поле \"name\"")
     public void testUpdateEmptyName() throws SQLException {
+
         var connection = makeConnection();
         var testModel = new TestModel(4, false, null, 4.44);
         var testModelExpected = new TestModel(testModel.getA(), testModel.isB(), "name4", testModel.getD());
+
         assertThatThrownBy(() -> dataTemplate.update(connection, testModel))
                 .isInstanceOf(DataTemplateException.class);
         assertThat(dataTemplate.findById(connection, testModel.getA()).get()).isEqualTo(testModelExpected);
     }
 
     private Properties getConnectionProperties() {
+
         Properties props = new Properties();
         props.setProperty("user", postgresqlContainer.getUsername());
         props.setProperty("password", postgresqlContainer.getPassword());
         props.setProperty("ssl", "false");
+
         return props;
     }
 
     private Connection makeConnection() throws SQLException {
+
         Connection connection =
                 DriverManager.getConnection(postgresqlContainer.getJdbcUrl(), getConnectionProperties());
         connection.setAutoCommit(true);
+
         return connection;
     }
 }
