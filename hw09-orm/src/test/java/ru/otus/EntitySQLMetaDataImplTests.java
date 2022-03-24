@@ -8,8 +8,8 @@ import ru.otus.jdbc.mapper.impl.EntityClassMetaDataImpl;
 import ru.otus.jdbc.mapper.impl.EntitySQLMetaDataImpl;
 import ru.otus.model.TestModel;
 
-import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 public class EntitySQLMetaDataImplTests {
 
@@ -21,7 +21,7 @@ public class EntitySQLMetaDataImplTests {
         EntitySQLMetaData entitySQLMetaData = new EntitySQLMetaDataImpl(entityClassMetaData);
         var selectAllSql = "select * from testmodel";
         var selectByIdSql = "select * from testmodel where a = ?";
-        var insertSql = "insert into testmodel(b, c, d) values (?, ?, ?)";
+        var insertSql = "insert into testmodel(b, c, d) values(?, ?, ?)";
         var updateSql = "update testmodel set b = ?, c = ?, d = ? where a = ?";
 
         assertThat(entitySQLMetaData.getSelectAllSql()).isEqualTo(selectAllSql);
