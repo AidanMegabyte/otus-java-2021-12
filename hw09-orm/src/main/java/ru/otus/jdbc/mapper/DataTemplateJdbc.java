@@ -35,11 +35,10 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
     public Optional<T> findById(Connection connection, long id) {
         var sql = entitySQLMetaData.getSelectByIdSql();
         return dbExecutor.executeSelect(connection, sql, List.of(id), resultSet -> {
-            try {
+            try (resultSet) {
                 if (resultSet.next()) {
                     return mapRow(resultSet);
                 }
-                resultSet.close();
                 return null;
             } catch (Exception e) {
                 throw new DataTemplateException(e);
@@ -51,12 +50,11 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
     public List<T> findAll(Connection connection) {
         var sql = entitySQLMetaData.getSelectAllSql();
         return dbExecutor.executeSelect(connection, sql, Collections.emptyList(), resultSet -> {
-            var result = new ArrayList<T>();
-            try {
+            try (resultSet) {
+                var result = new ArrayList<T>();
                 while (resultSet.next()) {
                     result.add(mapRow(resultSet));
                 }
-                resultSet.close();
                 return result;
             } catch (Exception e) {
                 throw new DataTemplateException(e);
