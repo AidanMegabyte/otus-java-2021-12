@@ -32,9 +32,13 @@ public class EntityClassMetaDataImpl<T> implements EntityClassMetaData<T> {
             this.idField = this.fields.stream()
                     .filter(field -> field.isAnnotationPresent(Id.class))
                     .findFirst()
-                    .orElseThrow(() -> new ClassMetaDataException(String.format("%s - ID field not found!", this.name)));
+                    .orElseThrow(() -> new ClassMetaDataException(
+                            String.format("%s - ID field not found!", this.name)
+                    ));
         } catch (NoSuchMethodException ex) {
-            throw new ClassMetaDataException(String.format("%s - default constructor required!", type.getName()));
+            throw new ClassMetaDataException(
+                    String.format("%s - default constructor required!", type.getName())
+            );
         }
     }
 

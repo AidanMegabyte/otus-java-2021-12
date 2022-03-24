@@ -20,7 +20,10 @@ public class EntitySQLMetaDataImpl implements EntitySQLMetaData {
 
     @Override
     public String getSelectAllSql() {
-        return String.format(SqlQueryFormats.SELECT_ALL_SQL_FORMAT, entityClassMetaData.getName().toLowerCase());
+        return String.format(
+                SqlQueryFormats.SELECT_ALL_SQL_FORMAT,
+                entityClassMetaData.getName().toLowerCase()
+        );
     }
 
     @Override
@@ -69,7 +72,7 @@ public class EntitySQLMetaDataImpl implements EntitySQLMetaData {
     private static class SqlQueryFormats {
         public static final String SELECT_ALL_SQL_FORMAT = "select * from %s";
         public static final String SELECT_BY_ID_SQL_FORMAT = "select * from %s where %s = ?";
-        public static final String INSERT_SQL_FORMAT = "insert into %s(%s) values (%s)";
+        public static final String INSERT_SQL_FORMAT = "insert into %s(%s) values(%s)";
         public static final String UPDATE_SQL_FORMAT = "update %s set %s where %s = ?";
     }
 }
