@@ -9,7 +9,7 @@ create table client
  */
 
 -- Для @GeneratedValue(strategy = GenerationType.SEQUENCE)
-create sequence hibernate_sequence start with 1 increment by 1;
+create sequence client_sequence start with 1 increment by 1;
 
 create table client
 (

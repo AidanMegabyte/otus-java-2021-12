@@ -7,7 +7,8 @@ import javax.persistence.*;
 public class Client implements Cloneable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "client_generator")
+    @SequenceGenerator(name = "client_generator", sequenceName = "client_sequence", allocationSize = 1)
     @Column(name = "id")
     private Long id;
 
