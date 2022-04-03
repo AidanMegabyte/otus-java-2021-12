@@ -18,11 +18,6 @@ public class Address {
     public Address() {
     }
 
-    public Address(String street) {
-        this.id = null;
-        this.street = street;
-    }
-
     public Address(Long id, String street) {
         this.id = id;
         this.street = street;
@@ -53,7 +48,7 @@ public class Address {
     }
 
     @Override
-    protected Object clone() {
+    protected Address clone() {
         return new Address(this.id, this.street);
     }
 }

@@ -18,11 +18,6 @@ public class Phone {
     public Phone() {
     }
 
-    public Phone(String number) {
-        this.id = null;
-        this.number = number;
-    }
-
     public Phone(Long id, String number) {
         this.id = id;
         this.number = number;
@@ -53,7 +48,7 @@ public class Phone {
     }
 
     @Override
-    protected Object clone() {
+    protected Phone clone() {
         return new Phone(this.id, this.number);
     }
 }

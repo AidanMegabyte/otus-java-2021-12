@@ -19,18 +19,12 @@ public class Client implements Cloneable {
     }
 
     public Client(String name) {
-        this.id = null;
         this.name = name;
     }
 
     public Client(Long id, String name) {
         this.id = id;
         this.name = name;
-    }
-
-    @Override
-    public Client clone() {
-        return new Client(this.id, this.name);
     }
 
     public Long getId() {
@@ -55,5 +49,10 @@ public class Client implements Cloneable {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';
+    }
+
+    @Override
+    public Client clone() {
+        return new Client(this.id, this.name);
     }
 }

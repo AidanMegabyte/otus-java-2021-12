@@ -1,14 +1,4 @@
--- Для @GeneratedValue(strategy = GenerationType.IDENTITY)
-/*
-create table client
-(
-    id   bigserial not null primary key,
-    name varchar(50)
-);
-
- */
-
--- Для @GeneratedValue(strategy = GenerationType.SEQUENCE)
+-- Клиент
 create sequence client_sequence start with 1 increment by 1;
 
 create table client
@@ -17,6 +7,7 @@ create table client
     name varchar(50)
 );
 
+-- Адрес
 create sequence address_sequence start with 1 increment by 1;
 
 create table address
@@ -25,6 +16,7 @@ create table address
     street varchar(50)
 );
 
+-- Номер телефона
 create sequence phone_sequence start with 1 increment by 1;
 
 create table phone
