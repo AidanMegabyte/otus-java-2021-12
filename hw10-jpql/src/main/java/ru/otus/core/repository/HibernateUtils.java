@@ -15,6 +15,7 @@ public final class HibernateUtils {
     }
 
     public static SessionFactory buildSessionFactory(Configuration configuration, Class<?>... annotatedClasses) {
+
         MetadataSources metadataSources = new MetadataSources(createServiceRegistry(configuration));
         Arrays.stream(annotatedClasses).forEach(metadataSources::addAnnotatedClass);
 

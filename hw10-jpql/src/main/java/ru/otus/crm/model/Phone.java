@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "phone")
-public class Phone {
+public class Phone implements Cloneable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "phone_generator")
@@ -19,8 +19,8 @@ public class Phone {
     }
 
     public Phone(Long id, String number) {
-        this.id = id;
-        this.number = number;
+        setId(id);
+        setNumber(number);
     }
 
     public Long getId() {
@@ -42,13 +42,13 @@ public class Phone {
     @Override
     public String toString() {
         return "Phone{" +
-                "id=" + id +
-                ", number='" + number + '\'' +
+                "id=" + getId() +
+                ", number='" + getNumber() + '\'' +
                 '}';
     }
 
     @Override
     protected Phone clone() {
-        return new Phone(this.id, this.number);
+        return new Phone(getId(), getNumber());
     }
 }

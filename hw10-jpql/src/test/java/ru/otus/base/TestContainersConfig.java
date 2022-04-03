@@ -11,6 +11,7 @@ public class TestContainersConfig {
     public static class CustomPostgreSQLContainer extends PostgreSQLContainer<CustomPostgreSQLContainer> {
 
         private static CustomPostgreSQLContainer container;
+
         private static final String IMAGE_VERSION = "postgres:12";
 
         public CustomPostgreSQLContainer() {
@@ -26,7 +27,9 @@ public class TestContainersConfig {
 
         @Override
         public void start() {
+
             super.start();
+
             var url = container.getJdbcUrl() + "&stringtype=unspecified";
             System.setProperty("app.datasource.demo-db.jdbcUrl", url);
             System.setProperty("app.datasource.demo-db.username", container.getUsername());
@@ -39,6 +42,5 @@ public class TestContainersConfig {
         public void stop() {
             super.stop();
         }
-
     }
 }
