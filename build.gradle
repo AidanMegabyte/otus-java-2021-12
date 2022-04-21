@@ -35,6 +35,13 @@ allprojects {
             dependency "org.ow2.asm:asm-commons:${asmVersion}"
             dependency("org.testcontainers:junit-jupiter:${testContainersVersion}")
             dependency("org.testcontainers:postgresql:${testContainersVersion}")
+            dependency("org.eclipse.jetty:jetty-servlet:${jettyVersion}")
+            dependency("org.eclipse.jetty:jetty-server:${jettyVersion}")
+            dependency("org.eclipse.jetty:jetty-webapp:${jettyVersion}")
+            dependency("org.eclipse.jetty:jetty-security:${jettyVersion}")
+            dependency("org.eclipse.jetty:jetty-http:${jettyVersion}")
+            dependency("org.eclipse.jetty:jetty-io:${jettyVersion}")
+            dependency("org.eclipse.jetty:jetty-util:${jettyVersion}")
         }
     }
 
