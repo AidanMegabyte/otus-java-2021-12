@@ -13,41 +13,43 @@
 <body>
 <div class="d-flex flex-column vh-100 p-3">
 
-    <div>
-        <h3 class="text-center">Добавление клиента</h3>
-        <form method="post" action="/clients">
+    <#if isAdmin>
+        <div>
+            <h3 class="text-center">Добавление клиента</h3>
+            <form method="post" action="/clients">
 
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col">
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">Имя</span>
-                            <input type="text" class="form-control" id="name" name="name">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">Имя</span>
+                                <input type="text" class="form-control" id="name" name="name">
+                            </div>
                         </div>
-                    </div>
-                    <div class="col">
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">Адрес</span>
-                            <input type="text" class="form-control" id="address" name="address">
+                        <div class="col">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">Адрес</span>
+                                <input type="text" class="form-control" id="address" name="address">
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-5">
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">Телефоны</span>
-                            <input type="text" class="form-control" id="phone1" name="phones">
-                            <span class="input-group-text">,</span>
-                            <input type="text" class="form-control" id="phone2" name="phones">
-                            <span class="input-group-text">,</span>
-                            <input type="text" class="form-control" id="phone3" name="phones">
+                        <div class="col-5">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">Телефоны</span>
+                                <input type="text" class="form-control" id="phone1" name="phones">
+                                <span class="input-group-text">,</span>
+                                <input type="text" class="form-control" id="phone2" name="phones">
+                                <span class="input-group-text">,</span>
+                                <input type="text" class="form-control" id="phone3" name="phones">
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-1">
-                        <button type="submit" class="btn btn-primary">Добавить</button>
+                        <div class="col-1">
+                            <button type="submit" class="btn btn-primary">Добавить</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </form>
-    </div>
+            </form>
+        </div>
+    </#if>
 
     <div class="flex-grow-1">
         <h3 class="text-center">Список клиентов</h3>
