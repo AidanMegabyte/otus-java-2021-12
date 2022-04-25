@@ -42,6 +42,7 @@ allprojects {
             dependency("org.eclipse.jetty:jetty-http:${jettyVersion}")
             dependency("org.eclipse.jetty:jetty-io:${jettyVersion}")
             dependency("org.eclipse.jetty:jetty-util:${jettyVersion}")
+            dependency("org.freemarker:freemarker:${freemarkerVersion}")
         }
     }
 
