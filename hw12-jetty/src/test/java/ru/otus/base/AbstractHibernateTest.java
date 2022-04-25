@@ -15,9 +15,9 @@ import ru.otus.crm.model.Phone;
 import ru.otus.crm.service.DBServiceClient;
 import ru.otus.crm.service.DbServiceClientImpl;
 
-import static ru.otus.demo.DbServiceDemo.HIBERNATE_CFG_FILE;
-
 public abstract class AbstractHibernateTest {
+
+    private static final String HIBERNATE_CFG_FILE = "hibernate.cfg.xml";
 
     protected SessionFactory sessionFactory;
 
