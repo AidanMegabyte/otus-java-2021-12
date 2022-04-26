@@ -28,11 +28,11 @@ allprojects {
     dependencyManagement {
         dependencies {
             imports {
-                mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootDependenciesVersion}"
+                mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootDependenciesVersion}")
             }
-            dependency "com.google.guava:guava:${guavaVersion}"
-            dependency "commons-io:commons-io:${apacheCommonsIoVersion}"
-            dependency "org.ow2.asm:asm-commons:${asmVersion}"
+            dependency("com.google.guava:guava:${guavaVersion}")
+            dependency("commons-io:commons-io:${apacheCommonsIoVersion}")
+            dependency("org.ow2.asm:asm-commons:${asmVersion}")
             dependency("org.testcontainers:junit-jupiter:${testContainersVersion}")
             dependency("org.testcontainers:postgresql:${testContainersVersion}")
             dependency("org.eclipse.jetty:jetty-servlet:${jettyVersion}")
@@ -43,6 +43,7 @@ allprojects {
             dependency("org.eclipse.jetty:jetty-io:${jettyVersion}")
             dependency("org.eclipse.jetty:jetty-util:${jettyVersion}")
             dependency("org.freemarker:freemarker:${freemarkerVersion}")
+            dependency("org.reflections:reflections:${reflectionsVersion}")
         }
     }
 
