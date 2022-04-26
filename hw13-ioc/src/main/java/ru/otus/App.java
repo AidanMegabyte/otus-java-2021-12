@@ -4,7 +4,6 @@ import ru.otus.appcontainer.AppComponentsContainerImpl;
 import ru.otus.appcontainer.api.AppComponentsContainer;
 import ru.otus.config.AppConfig;
 import ru.otus.services.GameProcessor;
-import ru.otus.services.GameProcessorImpl;
 
 /*
 В классе AppComponentsContainerImpl реализовать обработку, полученной в конструкторе конфигурации,
@@ -12,7 +11,7 @@ import ru.otus.services.GameProcessorImpl;
 В итоге должно получиться работающее приложение. Менять можно только класс AppComponentsContainerImpl.
 Можно добавлять свои исключения.
 
-Раскоментируйте тест:
+Раскомментируйте тест:
 @Disabled //надо удалить
 Тест и демо должны проходить для всех реализованных вариантов
 Не называйте свой проект ДЗ "homework-template", это имя заготовки)

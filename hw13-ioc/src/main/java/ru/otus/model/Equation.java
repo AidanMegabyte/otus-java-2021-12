@@ -1,8 +1,11 @@
 package ru.otus.model;
 
 public abstract class Equation {
+
     protected final int leftPart;
+
     protected final int rightPart;
+
     protected final int result;
 
     public Equation(int leftPart, int rightPart) {

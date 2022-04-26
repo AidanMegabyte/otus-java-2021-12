@@ -5,14 +5,15 @@ import java.io.PrintStream;
 import java.util.Scanner;
 
 public class IOServiceStreams implements IOService {
+
     private final PrintStream out;
+
     private final Scanner in;
 
     public IOServiceStreams(PrintStream out, InputStream in) {
         this.out = out;
         this.in = new Scanner(in);
     }
-
 
     @Override
     public void out(String message) {
