@@ -20,11 +20,13 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
         initContainer(Arrays.asList(initialConfigClasses));
     }
 
+    @SuppressWarnings("deprecation")
     public AppComponentsContainerImpl(String initialConfigPackage) {
         var reflections = new Reflections(initialConfigPackage, new SubTypesScanner(false));
         initContainer(reflections.getSubTypesOf(Object.class));
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <C> C getAppComponent(Class<C> componentClass) {
         return (C) appComponents.stream()
@@ -36,6 +38,7 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
                 )));
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <C> C getAppComponent(String componentName) {
         return (C) Optional.ofNullable(appComponentsByName.get(componentName))
@@ -46,11 +49,10 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
     }
 
     private void initContainer(Collection<Class<?>> initialConfigClasses) {
-        for (Class<?> initialConfigClass : initialConfigClasses) {
-            checkConfigClass(initialConfigClass);
-            var appComponentCreationMethods = findAppComponentCreationMethods(initialConfigClass);
-            createAppComponents(initialConfigClass, appComponentCreationMethods);
-        }
+        initialConfigClasses.forEach(this::checkConfigClass);
+        initialConfigClasses.stream()
+                .sorted(Comparator.comparingInt(config -> config.getAnnotation(AppComponentsContainerConfig.class).order()))
+                .forEach(config -> createAppComponents(config, findAppComponentCreationMethods(config)));
     }
 
     private void checkConfigClass(Class<?> configClass) {
