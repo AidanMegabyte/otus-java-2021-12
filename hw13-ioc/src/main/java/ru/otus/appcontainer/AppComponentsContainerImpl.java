@@ -1,7 +1,7 @@
 package ru.otus.appcontainer;
 
 import org.reflections.Reflections;
-import org.reflections.scanners.SubTypesScanner;
+import org.reflections.scanners.Scanners;
 import ru.otus.appcontainer.api.AppComponent;
 import ru.otus.appcontainer.api.AppComponentsContainer;
 import ru.otus.appcontainer.api.AppComponentsContainerConfig;
@@ -20,22 +20,37 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
         initContainer(Arrays.asList(initialConfigClasses));
     }
 
-    @SuppressWarnings("deprecation")
     public AppComponentsContainerImpl(String initialConfigPackage) {
-        var reflections = new Reflections(initialConfigPackage, new SubTypesScanner(false));
+        var reflections = new Reflections(
+                initialConfigPackage,
+                Scanners.SubTypes.filterResultsBy(c -> true)
+        );
         initContainer(reflections.getSubTypesOf(Object.class));
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public <C> C getAppComponent(Class<C> componentClass) {
-        return (C) appComponents.stream()
+
+        var foundAppComponents = appComponents.stream()
                 .filter(appComponent -> componentClass.isAssignableFrom(appComponent.getClass()))
-                .findFirst()
-                .orElseThrow(() -> new AppComponentException(String.format(
-                        "Component of class \"%s\" not found!",
-                        componentClass.getName()
-                )));
+                .toList();
+
+        if (foundAppComponents.size() == 0) {
+            throw new AppComponentException(String.format(
+                    "Component of (sub)class \"%s\" not found!",
+                    componentClass.getName()
+            ));
+        }
+
+        if (foundAppComponents.size() > 1) {
+            throw new AppComponentException(String.format(
+                    "More than one component of (sub)class \"%s\" found!",
+                    componentClass.getName()
+            ));
+        }
+
+        return (C) foundAppComponents.get(0);
     }
 
     @SuppressWarnings("unchecked")
@@ -73,13 +88,24 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
 
     private void createAppComponents(Class<?> configClass, List<Method> appComponentCreationMethods) {
         try {
+
             var instance = configClass.getConstructor().newInstance();
+
             for (Method method : appComponentCreationMethods) {
+
                 var appComponentName = method.getAnnotation(AppComponent.class).name();
+                if (appComponentsByName.containsKey(appComponentName)) {
+                    throw new AppComponentException(String.format(
+                            "Component with name \"%s\" already exists!",
+                            appComponentName
+                    ));
+                }
+
                 var args = Arrays.stream(method.getParameterTypes())
                         .map(this::getAppComponent)
                         .toArray();
                 var appComponent = method.invoke(instance, args);
+
                 appComponents.add(appComponent);
                 appComponentsByName.put(appComponentName, appComponent);
             }
