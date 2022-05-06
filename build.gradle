@@ -3,6 +3,7 @@ plugins {
     id "io.spring.dependency-management" version "${dependencyManagenementVersion}"
     id "com.github.johnrengelman.shadow" version "${shadowVersion}" apply false
     id "me.champeau.jmh" version "${jmhVersion}" apply false
+    id "org.springframework.boot" version "${springBootVersion}" apply false
 }
 
 idea {
@@ -28,7 +29,7 @@ allprojects {
     dependencyManagement {
         dependencies {
             imports {
-                mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootDependenciesVersion}")
+                mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
             }
             dependency("com.google.guava:guava:${guavaVersion}")
             dependency("commons-io:commons-io:${apacheCommonsIoVersion}")
@@ -44,6 +45,7 @@ allprojects {
             dependency("org.eclipse.jetty:jetty-util:${jettyVersion}")
             dependency("org.freemarker:freemarker:${freemarkerVersion}")
             dependency("org.reflections:reflections:${reflectionsVersion}")
+            dependency("com.google.code.findbugs:jsr305:${jsr305Version}")
         }
     }
 
@@ -53,6 +55,7 @@ allprojects {
         }
         resolutionStrategy {
             force("net.java.dev.jna:jna:5.8.0")
+            force("com.fasterxml.jackson:jackson-bom:2.13.2.1")
         }
     }
 }
