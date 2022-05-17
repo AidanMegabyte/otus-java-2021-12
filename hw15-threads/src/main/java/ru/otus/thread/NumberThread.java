@@ -34,23 +34,23 @@ public class NumberThread extends Thread {
         var increment = -1;
 
         while (!isInterrupted()) {
-            synchronized (sharedData) {
-                try {
+            try {
+                synchronized (sharedData) {
                     while (Objects.equals(getName(), sharedData.getLastThreadName())) {
                         sharedData.wait();
                     }
                     logger.info("{}: {}", getName(), current);
                     sharedData.setLastThreadName(getName());
                     sharedData.notifyAll();
-                    if (current == start || current == end) {
-                        increment = -increment;
-                    }
-                    current += increment;
-                    sleep(1000);
-                } catch (InterruptedException e) {
-                    logger.error(e.getMessage(), e);
-                    interrupt();
                 }
+                if (current == start || current == end) {
+                    increment = -increment;
+                }
+                current += increment;
+                sleep(1000);
+            } catch (InterruptedException e) {
+                logger.error(e.getMessage(), e);
+                interrupt();
             }
         }
     }
