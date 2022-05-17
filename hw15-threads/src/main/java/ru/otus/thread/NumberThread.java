@@ -39,7 +39,7 @@ public class NumberThread extends Thread {
                     while (Objects.equals(getName(), sharedData.getLastThreadName())) {
                         sharedData.wait();
                     }
-                    logger.info("{}: {}", Thread.currentThread().getName(), current);
+                    logger.info("{}: {}", getName(), current);
                     sharedData.setLastThreadName(getName());
                     sharedData.notifyAll();
                     if (current == start || current == end) {
