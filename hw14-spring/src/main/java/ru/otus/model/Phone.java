@@ -2,7 +2,7 @@ package ru.otus.model;
 
 import lombok.Getter;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.domain.Persistable;
 import org.springframework.data.relational.core.mapping.Column;
@@ -25,7 +25,7 @@ public class Phone implements Cloneable, Persistable<Long> {
     @Transient
     private final boolean isNew;
 
-    @PersistenceConstructor
+    @PersistenceCreator
     public Phone(Long id, String number) {
         this.id = id;
         this.number = number;
