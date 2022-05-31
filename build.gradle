@@ -1,9 +1,9 @@
 plugins {
-    id 'idea'
-    id 'io.spring.dependency-management' version "${dependencyManagenementVersion}"
-    id 'com.github.johnrengelman.shadow' version "${shadowVersion}" apply false
-    id 'me.champeau.jmh' version "${jmhVersion}" apply false
-    id 'org.springframework.boot' version "${springBootVersion}" apply false
+    id "idea"
+    id "io.spring.dependency-management" version "${dependencyManagenementVersion}"
+    id "com.github.johnrengelman.shadow" version "${shadowVersion}" apply false
+    id "me.champeau.jmh" version "${jmhVersion}" apply false
+    id "org.springframework.boot" version "${springBootVersion}" apply false
 }
 
 idea {
@@ -18,13 +18,13 @@ idea {
 
 allprojects {
 
-    group 'ru.otus'
+    group "ru.otus"
 
     repositories {
         mavenCentral()
     }
 
-    apply plugin: 'io.spring.dependency-management'
+    apply plugin: "io.spring.dependency-management"
 
     dependencyManagement {
         dependencies {
