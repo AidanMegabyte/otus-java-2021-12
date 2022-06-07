@@ -41,6 +41,8 @@ allprojects {
             dependency "org.freemarker:freemarker:${freemarkerVersion}"
             dependency "org.reflections:reflections:${reflectionsVersion}"
             dependency "com.google.code.findbugs:jsr305:${jsr305Version}"
+            dependency "com.google.protobuf:protoc:${protobufVersion}"
+            dependency "org.apache.tomcat:annotations-api:${tomcatAnnotationsApiVersion}"
         }
     }
 
@@ -50,7 +52,7 @@ allprojects {
         }
         resolutionStrategy {
             force "com.google.errorprone:error_prone_annotations:2.11.0"
-            force "com.google.protobuf:protobuf-java:3.19.2"
+            force "com.google.protobuf:protobuf-java:${protobufVersion}"
         }
     }
 }
