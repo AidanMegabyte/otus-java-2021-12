@@ -4,6 +4,7 @@ plugins {
     id "com.github.johnrengelman.shadow" version "${shadowVersion}" apply false
     id "me.champeau.jmh" version "${jmhVersion}" apply false
     id "org.springframework.boot" version "${springBootVersion}" apply false
+    id "com.google.protobuf" version "${protobufPluginVersion}" apply false
 }
 
 idea {
@@ -32,6 +33,7 @@ allprojects {
                 mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
                 mavenBom "org.eclipse.jetty:jetty-bom:${jettyVersion}"
                 mavenBom "org.testcontainers:testcontainers-bom:${testContainersVersion}"
+                mavenBom "io.grpc:grpc-bom:${grpcVersion}"
             }
             dependency "com.google.guava:guava:${guavaVersion}"
             dependency "commons-io:commons-io:${apacheCommonsIoVersion}"
@@ -39,12 +41,18 @@ allprojects {
             dependency "org.freemarker:freemarker:${freemarkerVersion}"
             dependency "org.reflections:reflections:${reflectionsVersion}"
             dependency "com.google.code.findbugs:jsr305:${jsr305Version}"
+            dependency "com.google.protobuf:protoc:${protobufVersion}"
+            dependency "org.apache.tomcat:annotations-api:${tomcatAnnotationsApiVersion}"
         }
     }
 
     configurations.all {
         resolutionStrategy {
             failOnVersionConflict()
+        }
+        resolutionStrategy {
+            force "com.google.errorprone:error_prone_annotations:2.11.0"
+            force "com.google.protobuf:protobuf-java:${protobufVersion}"
         }
     }
 }
