@@ -41,18 +41,16 @@ allprojects {
             dependency "org.freemarker:freemarker:${freemarkerVersion}"
             dependency "org.reflections:reflections:${reflectionsVersion}"
             dependency "com.google.code.findbugs:jsr305:${jsr305Version}"
+            dependency "com.google.protobuf:protobuf-java:${protobufVersion}"
             dependency "com.google.protobuf:protoc:${protobufVersion}"
             dependency "org.apache.tomcat:annotations-api:${tomcatAnnotationsApiVersion}"
+            dependency "com.google.errorprone:error_prone_annotations:${errorproneVersion}"
         }
     }
 
     configurations.all {
         resolutionStrategy {
             failOnVersionConflict()
-        }
-        resolutionStrategy {
-            force "com.google.errorprone:error_prone_annotations:2.11.0"
-            force "com.google.protobuf:protobuf-java:${protobufVersion}"
         }
     }
 }
