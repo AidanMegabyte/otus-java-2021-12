@@ -1,18 +1,15 @@
 package ru.otus.service;
 
-import ru.otus.model.Client;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import ru.otus.model.ClientDto;
 
 import javax.annotation.Nonnull;
-import java.util.Collection;
-import java.util.Optional;
+import java.util.List;
 
 public interface ClientService {
 
-    Iterable<Client> findAllClients();
+    Flux<ClientDto> findAllClients();
 
-    Optional<Client> getClient(long id);
-
-    Client saveClient(@Nonnull String name,
-                      @Nonnull String street,
-                      @Nonnull Collection<String> phoneNumbers);
+    Mono<ClientDto> createClient(@Nonnull String name, @Nonnull String street, @Nonnull List<String> phoneNumbers);
 }

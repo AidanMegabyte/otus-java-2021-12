@@ -1,44 +1,27 @@
 package ru.otus.controller;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import ru.otus.model.ClientDto;
 import ru.otus.service.ClientService;
 
-import java.util.List;
-
-@Controller
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/client")
 public class ClientController {
 
     private final ClientService clientService;
 
-    public ClientController(ClientService clientService) {
-        this.clientService = clientService;
+    @GetMapping(value = "/list", produces = MediaType.APPLICATION_NDJSON_VALUE)
+    public Flux<ClientDto> getClients() {
+        return clientService.findAllClients();
     }
 
-    @GetMapping
-    public String getClients(Model model) {
-        model.addAttribute("clients", clientService.findAllClients());
-        return "clients";
-    }
-
-    @PostMapping("/add")
-    public String addClient(AddClientFormData formData) {
-        clientService.saveClient(formData.getName(), formData.getStreet(), formData.getPhoneNumbers());
-        return "redirect:/";
-    }
-
-    @Getter
-    @Setter
-    private static class AddClientFormData {
-
-        private String name;
-
-        private String street;
-
-        private List<String> phoneNumbers;
+    @PostMapping(value = "/add", produces = MediaType.APPLICATION_NDJSON_VALUE)
+    public Mono<ClientDto> addClient(@RequestBody ClientDto clientDto) {
+        return clientService.createClient(clientDto.getName(), clientDto.getStreet(), clientDto.getPhoneNumbers());
     }
 }

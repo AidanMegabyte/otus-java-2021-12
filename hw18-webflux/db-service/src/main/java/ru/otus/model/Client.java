@@ -1,22 +1,19 @@
 package ru.otus.model;
 
 import lombok.Getter;
+import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceCreator;
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.domain.Persistable;
 import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.MappedCollection;
 import org.springframework.data.relational.core.mapping.Table;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Table("client")
 @Getter
-public class Client implements Cloneable, Persistable<Long> {
+@ToString
+public class Client implements Cloneable {
 
     @Id
     @Nonnull
@@ -26,24 +23,10 @@ public class Client implements Cloneable, Persistable<Long> {
     @Nonnull
     private final String name;
 
-    @MappedCollection(idColumn = "client_id")
-    @Nonnull
-    private final Address address;
-
-    @MappedCollection(idColumn = "client_id", keyColumn = "id")
-    @Nonnull
-    private final Set<Phone> phones;
-
-    @Transient
-    private final boolean isNew;
-
     @PersistenceCreator
-    public Client(Long id, String name, Address address, Set<Phone> phones) {
+    public Client(Long id, String name) {
         this.id = id;
         this.name = name;
-        this.address = address;
-        this.phones = phones;
-        this.isNew = id == null;
     }
 
     @Override
@@ -51,29 +34,16 @@ public class Client implements Cloneable, Persistable<Long> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Client client = (Client) o;
-        return Objects.equals(id, client.id);
+        return Objects.equals(getId(), client.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    @Override
-    public String toString() {
-        return "Client{" +
-                "id=" + getId() +
-                ", name='" + getName() + '\'' +
-                ", address=" + getAddress() +
-                ", phones=" + getPhones() +
-                '}';
+        return Objects.hash(getId());
     }
 
     @Override
     public Client clone() {
-        var address = getAddress() == null ? null : getAddress().clone();
-        var phones = getPhones() == null ?
-                null : getPhones().stream().map(Phone::clone).collect(Collectors.toSet());
-        return new Client(getId(), getName(), address, phones);
+        return new Client(getId(), getName());
     }
 }

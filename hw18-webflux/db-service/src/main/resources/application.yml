@@ -1,10 +1,13 @@
+db-base-url: postgresql://localhost:5430/demoDB
+db-user: usr
+db-password: pwd
 spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5430/demoDB
-    username: usr
-    password: pwd
+  r2dbc:
+    url: r2dbc:${db-base-url}
+    username: ${db-user}
+    password: ${db-password}
   flyway:
     enabled: true
-  freemarker:
-    template-loader-path: classpath:/pages
-    suffix: .ftl
+    url: jdbc:${db-base-url}
+    user: ${db-user}
+    password: ${db-password}

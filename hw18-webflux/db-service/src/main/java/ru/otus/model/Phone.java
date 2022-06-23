@@ -1,10 +1,9 @@
 package ru.otus.model;
 
 import lombok.Getter;
+import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceCreator;
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.domain.Persistable;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
@@ -12,7 +11,8 @@ import javax.annotation.Nonnull;
 
 @Table("phone")
 @Getter
-public class Phone implements Cloneable, Persistable<Long> {
+@ToString
+public class Phone implements Cloneable {
 
     @Id
     @Nonnull
@@ -22,26 +22,19 @@ public class Phone implements Cloneable, Persistable<Long> {
     @Nonnull
     private final String number;
 
-    @Transient
-    private final boolean isNew;
+    @Column("client_id")
+    @Nonnull
+    private final Long clientId;
 
     @PersistenceCreator
-    public Phone(Long id, String number) {
+    public Phone(Long id, String number, Long clientId) {
         this.id = id;
         this.number = number;
-        this.isNew = id == null;
-    }
-
-    @Override
-    public String toString() {
-        return "Phone{" +
-                "id=" + getId() +
-                ", number='" + getNumber() + '\'' +
-                '}';
+        this.clientId = clientId;
     }
 
     @Override
     protected Phone clone() {
-        return new Phone(getId(), getNumber());
+        return new Phone(getId(), getNumber(), getClientId());
     }
 }
