@@ -1,44 +1,40 @@
 package ru.otus.controller;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import ru.otus.service.ClientService;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import ru.otus.model.ClientDto;
 
-import java.util.List;
-
-@Controller
+@RestController
 public class ClientController {
 
-    private final ClientService clientService;
+    private final WebClient client;
 
-    public ClientController(ClientService clientService) {
-        this.clientService = clientService;
+    public ClientController(WebClient.Builder builder) {
+        client = builder
+                .baseUrl("http://localhost:8080")
+                .build();
     }
 
-    @GetMapping
-    public String getClients(Model model) {
-        model.addAttribute("clients", clientService.findAllClients());
-        return "clients";
+    @GetMapping(produces = MediaType.APPLICATION_NDJSON_VALUE)
+    public Flux<ClientDto> getClients() {
+        return client.get().uri("/api/client/list")
+                .accept(MediaType.APPLICATION_NDJSON)
+                .retrieve()
+                .bodyToFlux(ClientDto.class);
     }
 
-    @PostMapping("/add")
-    public String addClient(AddClientFormData formData) {
-        clientService.saveClient(formData.getName(), formData.getStreet(), formData.getPhoneNumbers());
-        return "redirect:/";
-    }
-
-    @Getter
-    @Setter
-    private static class AddClientFormData {
-
-        private String name;
-
-        private String street;
-
-        private List<String> phoneNumbers;
+    @PostMapping(value = "/add", produces = MediaType.APPLICATION_NDJSON_VALUE)
+    public Mono<ClientDto> addClient(@RequestBody ClientDto clientDto) {
+        return client.post().uri("/api/client/add")
+                .accept(MediaType.APPLICATION_NDJSON)
+                .bodyValue(clientDto)
+                .retrieve()
+                .bodyToMono(ClientDto.class);
     }
 }

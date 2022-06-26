@@ -9,6 +9,7 @@
   </appender>
 
   <logger name="org.springframework.data.jdbc" level="ERROR"/>
+  <logger name="org.springframework.data.r2dbc" level="ERROR"/>
   <logger name="ch.qos.logback" level="ERROR"/>
 
   <root level="DEBUG">
