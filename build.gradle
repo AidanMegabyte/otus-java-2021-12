@@ -31,7 +31,6 @@ allprojects {
         dependencies {
             imports {
                 mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
-                mavenBom "org.eclipse.jetty:jetty-bom:${jettyVersion}"
                 mavenBom "org.testcontainers:testcontainers-bom:${testContainersVersion}"
                 mavenBom "io.grpc:grpc-bom:${grpcVersion}"
             }
