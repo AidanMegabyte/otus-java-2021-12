@@ -1,0 +1,13 @@
+db-base-url: postgresql://localhost:5430/demoDB
+db-user: usr
+db-password: pwd
+spring:
+  r2dbc:
+    url: r2dbc:${db-base-url}
+    username: ${db-user}
+    password: ${db-password}
+  flyway:
+    enabled: true
+    url: jdbc:${db-base-url}
+    user: ${db-user}
+    password: ${db-password}
