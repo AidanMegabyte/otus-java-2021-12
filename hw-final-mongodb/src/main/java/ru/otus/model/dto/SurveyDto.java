@@ -3,6 +3,7 @@ package ru.otus.model.dto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import ru.otus.model.document.SurveyTemplate;
 
 import javax.annotation.Nonnull;
 import java.util.Date;
@@ -22,4 +23,7 @@ public class SurveyDto {
 
     @Nonnull
     private String userCreated;
+
+    @Nonnull
+    private SurveyTemplate template;
 }

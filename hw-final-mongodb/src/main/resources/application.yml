@@ -3,9 +3,9 @@ spring:
     mongodb:
       host: localhost
       port: 27019
-      database: demoDB
-      username: usr
-      password: pwd
+#      database: demoDB
+#      username: usr
+#      password: pwd
   datasource:
     url: jdbc:postgresql://localhost:5430/demoDB
     username: usr

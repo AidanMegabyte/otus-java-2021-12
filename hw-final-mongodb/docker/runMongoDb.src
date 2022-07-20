@@ -1,6 +1,1 @@
-docker run --rm --name mongodb--docker \
--e MONGODB_INITDB_ROOT_PASSWORD=pwd \
--e MONGODB_INITDB_ROOT_USERNAME=usr \
--e MONGO_INITDB_DATABASE=demoDB \
--p 27019:27017 \
-mongo:5.0.9
+docker run --rm --name mongodb--docker -p 27019:27017 mongo:5.0.9
