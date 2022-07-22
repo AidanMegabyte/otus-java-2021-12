@@ -28,6 +28,7 @@ import javax.sql.DataSource;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 @SpringBootTest
@@ -121,23 +122,19 @@ public class SurveyServiceTests {
     @Test
     @DisplayName("Откат \"сквозной\" транзакции: ошибка при сохранении в Postgresql")
     public void testRollbackIfPostgresqlSaveError() {
-        try {
-            surveyService.save(createSurveyRequest(null, createSurveyTemplate()));
-        } catch (DataIntegrityViolationException e) {
-            assertThat(surveyRepository.count()).isEqualTo(0);
-            assertThat(surveyTemplateRepository.count()).isEqualTo(0);
-        }
+        assertThatExceptionOfType(DataIntegrityViolationException.class)
+                .isThrownBy(() -> surveyService.save(createSurveyRequest(null, createSurveyTemplate())));
+        assertThat(surveyRepository.count()).isEqualTo(0);
+        assertThat(surveyTemplateRepository.count()).isEqualTo(0);
     }
 
     @Test
     @DisplayName("Откат \"сквозной\" транзакции: ошибка при сохранении в MongoDB")
     public void testRollbackIfMongoDbSaveError() {
-        try {
-            surveyService.save(createSurveyRequest("абырвалг", null));
-        } catch (NullPointerException e) {
-            assertThat(surveyRepository.count()).isEqualTo(0);
-            assertThat(surveyTemplateRepository.count()).isEqualTo(0);
-        }
+        assertThatExceptionOfType(NullPointerException.class)
+                .isThrownBy(() -> surveyService.save(createSurveyRequest("абырвалг", null)));
+        assertThat(surveyRepository.count()).isEqualTo(0);
+        assertThat(surveyTemplateRepository.count()).isEqualTo(0);
     }
 
     private SurveyRequest createSurveyRequest(String name, SurveyTemplate template) {
