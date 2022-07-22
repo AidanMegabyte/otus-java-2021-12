@@ -2,8 +2,10 @@ package ru.otus.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.otus.model.dto.SurveyDto;
+import ru.otus.model.document.SurveyTemplate;
+import ru.otus.model.dto.SurveyFullDto;
 import ru.otus.model.dto.SurveyRequest;
+import ru.otus.model.entity.Survey;
 import ru.otus.service.SurveyService;
 
 import java.util.List;
@@ -16,23 +18,28 @@ public class SurveyController {
     private final SurveyService surveyService;
 
     @GetMapping("/list")
-    public List<SurveyDto> getList() {
+    public List<Survey> getList() {
         return surveyService.getList();
     }
 
-    @GetMapping("/{id}")
-    public SurveyDto get(@PathVariable("id") long id) {
-        return surveyService.get(id);
+    @GetMapping("/{id}/full")
+    public SurveyFullDto getFull(@PathVariable("id") long id) {
+        return surveyService.getFull(id);
+    }
+
+    @GetMapping("/{id}/template")
+    public SurveyTemplate getTemplate(@PathVariable("id") long id) {
+        return surveyService.getTemplate(id);
     }
 
     @PostMapping("/create")
-    public SurveyDto create(@RequestBody SurveyRequest surveyRequest) {
-        return surveyService.save(null, surveyRequest);
+    public SurveyFullDto create(@RequestBody SurveyRequest surveyRequest) {
+        return surveyService.save(surveyRequest);
     }
 
-    @PutMapping("/{id}")
-    public SurveyDto modify(@PathVariable("id") long id, @RequestBody SurveyRequest surveyRequest) {
-        return surveyService.save(id, surveyRequest);
+    @PutMapping("/edit")
+    public SurveyFullDto modify(@RequestBody SurveyRequest surveyRequest) {
+        return surveyService.save(surveyRequest);
     }
 
     @DeleteMapping("/{id}")

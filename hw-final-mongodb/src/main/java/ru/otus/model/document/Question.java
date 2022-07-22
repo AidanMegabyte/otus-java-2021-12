@@ -1,14 +1,12 @@
 package ru.otus.model.document;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import ru.otus.model.common.QuestionType;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -23,5 +21,5 @@ public class Question {
     private boolean required;
 
     @Nonnull
-    private List<? extends Answer> answers;
+    private List<Answer> answers;
 }

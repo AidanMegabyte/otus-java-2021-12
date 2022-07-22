@@ -1,17 +1,21 @@
 package ru.otus.service;
 
-import ru.otus.model.dto.SurveyDto;
+import ru.otus.model.document.SurveyTemplate;
+import ru.otus.model.dto.SurveyFullDto;
 import ru.otus.model.dto.SurveyRequest;
+import ru.otus.model.entity.Survey;
 
 import java.util.List;
 
 public interface SurveyService {
 
-    List<SurveyDto> getList();
+    List<Survey> getList();
 
-    SurveyDto get(long id);
+    SurveyFullDto getFull(long id);
 
-    SurveyDto save(Long id, SurveyRequest surveyRequest);
+    SurveyTemplate getTemplate(long id);
+
+    SurveyFullDto save(SurveyRequest surveyRequest);
 
     void delete(long id);
 }

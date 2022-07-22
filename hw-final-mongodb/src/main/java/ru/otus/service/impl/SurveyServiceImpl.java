@@ -5,7 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.dao.SurveyRepository;
 import ru.otus.dao.SurveyTemplateRepository;
-import ru.otus.model.dto.SurveyDto;
+import ru.otus.model.document.SurveyTemplate;
+import ru.otus.model.dto.SurveyFullDto;
 import ru.otus.model.dto.SurveyRequest;
 import ru.otus.model.entity.Survey;
 import ru.otus.service.SurveyService;
@@ -25,23 +26,14 @@ public class SurveyServiceImpl implements SurveyService {
     private static final List<String> users = Arrays.asList("Вагон Героев", "Тояма Токанава", "Бздашек Западловский");
 
     @Override
-    public List<SurveyDto> getList() {
-        return surveyRepository.findAll().stream()
-                .map(survey -> SurveyDto.builder()
-                        .id(survey.getId())
-                        .name(survey.getName())
-                        .dateTimeCreated(survey.getDateTimeCreated())
-                        .userCreated(survey.getUserCreated())
-                        .template(surveyTemplateRepository.findById(survey.getId()).orElseThrow())
-                        .build()
-                )
-                .toList();
+    public List<Survey> getList() {
+        return surveyRepository.findAll();
     }
 
     @Override
-    public SurveyDto get(long id) {
+    public SurveyFullDto getFull(long id) {
         var survey = surveyRepository.findById(id).orElseThrow();
-        return SurveyDto.builder()
+        return SurveyFullDto.builder()
                 .id(survey.getId())
                 .name(survey.getName())
                 .dateTimeCreated(survey.getDateTimeCreated())
@@ -51,22 +43,28 @@ public class SurveyServiceImpl implements SurveyService {
     }
 
     @Override
+    public SurveyTemplate getTemplate(long id) {
+        return surveyTemplateRepository.findById(id).orElseThrow();
+    }
+
+    @Override
     @Transactional
-    public SurveyDto save(Long id, SurveyRequest surveyRequest) {
+    public SurveyFullDto save(SurveyRequest surveyRequest) {
+
+        var id = surveyRequest.getId();
 
         var survey = id != null ? surveyRepository.findById(id).orElseThrow() : new Survey();
-        var surveyTemplate = surveyRequest.getTemplate();
-
         survey.setName(surveyRequest.getName());
         if (id == null) {
             survey.setUserCreated(getRandomUser());
         }
-
         survey = surveyRepository.save(survey);
+
+        var surveyTemplate = surveyRequest.getTemplate();
         surveyTemplate.setId(survey.getId());
         surveyTemplate = surveyTemplateRepository.save(surveyTemplate);
 
-        return SurveyDto.builder()
+        return SurveyFullDto.builder()
                 .id(survey.getId())
                 .name(survey.getName())
                 .dateTimeCreated(survey.getDateTimeCreated())

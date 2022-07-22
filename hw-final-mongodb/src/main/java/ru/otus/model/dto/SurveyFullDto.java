@@ -1,8 +1,6 @@
 package ru.otus.model.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import ru.otus.model.document.SurveyTemplate;
 
 import javax.annotation.Nonnull;
@@ -11,7 +9,9 @@ import java.util.Date;
 @Getter
 @Setter
 @Builder
-public class SurveyDto {
+@NoArgsConstructor
+@AllArgsConstructor
+public class SurveyFullDto {
 
     private long id;
 

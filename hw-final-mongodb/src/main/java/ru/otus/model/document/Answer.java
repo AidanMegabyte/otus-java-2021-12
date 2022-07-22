@@ -1,13 +1,11 @@
 package ru.otus.model.document;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import ru.otus.model.common.QuestionType;
 
 import javax.annotation.Nonnull;
 
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

@@ -1,9 +1,6 @@
 package ru.otus.model.document;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -14,10 +11,12 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 @Document(collection = "survey")
 public class SurveyTemplate {
 
     @Id
+    @Nonnull
     private Long id;
 
     @Nonnull
