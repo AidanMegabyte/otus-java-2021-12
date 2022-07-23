@@ -10,10 +10,9 @@ import ru.otus.model.dto.SurveyFullDto;
 import ru.otus.model.dto.SurveyRequest;
 import ru.otus.model.entity.Survey;
 import ru.otus.service.SurveyService;
+import ru.otus.service.UserService;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +22,7 @@ public class SurveyServiceImpl implements SurveyService {
 
     private final SurveyTemplateRepository surveyTemplateRepository;
 
-    private static final List<String> users = Arrays.asList("Вагон Героев", "Тояма Токанава", "Бздашек Западловский");
+    private final UserService userService;
 
     @Override
     public List<Survey> getList() {
@@ -56,7 +55,7 @@ public class SurveyServiceImpl implements SurveyService {
         var survey = id != null ? surveyRepository.findById(id).orElseThrow() : new Survey();
         survey.setName(surveyRequest.getName());
         if (id == null) {
-            survey.setUserCreated(getRandomUser());
+            survey.setUserCreated(userService.getRandomUser());
         }
         survey = surveyRepository.save(survey);
 
@@ -78,10 +77,5 @@ public class SurveyServiceImpl implements SurveyService {
     public void delete(long id) {
         surveyRepository.deleteById(id);
         surveyTemplateRepository.deleteById(id);
-    }
-
-    private String getRandomUser() {
-        var idx = new Random().nextInt(users.size());
-        return users.get(idx);
     }
 }
