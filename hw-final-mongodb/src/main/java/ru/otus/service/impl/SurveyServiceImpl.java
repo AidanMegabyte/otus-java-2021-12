@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.dao.SurveyRepository;
 import ru.otus.dao.SurveyTemplateRepository;
+import ru.otus.exception.SurveyNotFoundException;
 import ru.otus.model.document.SurveyTemplate;
 import ru.otus.model.dto.SurveyFullDto;
 import ru.otus.model.dto.SurveyRequest;
@@ -13,6 +14,8 @@ import ru.otus.service.SurveyService;
 import ru.otus.service.UserService;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +27,8 @@ public class SurveyServiceImpl implements SurveyService {
 
     private final UserService userService;
 
+    private static final String SURVEY_NOT_FOUND_ERROR_MESSAGE = "Survey not found!";
+
     @Override
     public List<Survey> getList() {
         return surveyRepository.findAll();
@@ -31,19 +36,14 @@ public class SurveyServiceImpl implements SurveyService {
 
     @Override
     public SurveyFullDto getFull(long id) {
-        var survey = surveyRepository.findById(id).orElseThrow();
-        return SurveyFullDto.builder()
-                .id(survey.getId())
-                .name(survey.getName())
-                .dateTimeCreated(survey.getDateTimeCreated())
-                .userCreated(survey.getUserCreated())
-                .template(surveyTemplateRepository.findById(survey.getId()).orElseThrow())
-                .build();
+        var survey = findSurveyById(id);
+        var template = findTemplateById(id);
+        return mapToFullDto(survey, template);
     }
 
     @Override
     public SurveyTemplate getTemplate(long id) {
-        return surveyTemplateRepository.findById(id).orElseThrow();
+        return findTemplateById(id);
     }
 
     @Override
@@ -52,24 +52,18 @@ public class SurveyServiceImpl implements SurveyService {
 
         var id = surveyRequest.getId();
 
-        var survey = id != null ? surveyRepository.findById(id).orElseThrow() : new Survey();
+        var survey = id != null ? findSurveyById(id) : new Survey();
         survey.setName(surveyRequest.getName());
         if (id == null) {
             survey.setUserCreated(userService.getRandomUser());
         }
         survey = surveyRepository.save(survey);
 
-        var surveyTemplate = surveyRequest.getTemplate();
-        surveyTemplate.setId(survey.getId());
-        surveyTemplate = surveyTemplateRepository.save(surveyTemplate);
+        var template = surveyRequest.getTemplate();
+        template.setId(survey.getId());
+        template = surveyTemplateRepository.save(template);
 
-        return SurveyFullDto.builder()
-                .id(survey.getId())
-                .name(survey.getName())
-                .dateTimeCreated(survey.getDateTimeCreated())
-                .userCreated(survey.getUserCreated())
-                .template(surveyTemplate)
-                .build();
+        return mapToFullDto(survey, template);
     }
 
     @Override
@@ -77,5 +71,27 @@ public class SurveyServiceImpl implements SurveyService {
     public void delete(long id) {
         surveyRepository.deleteById(id);
         surveyTemplateRepository.deleteById(id);
+    }
+
+    private SurveyFullDto mapToFullDto(Survey survey, SurveyTemplate template) {
+        return SurveyFullDto.builder()
+                .id(survey.getId())
+                .name(survey.getName())
+                .dateTimeCreated(survey.getDateTimeCreated())
+                .userCreated(survey.getUserCreated())
+                .template(template)
+                .build();
+    }
+
+    private Survey findSurveyById(long id) {
+        return findById(() -> surveyRepository.findById(id));
+    }
+
+    private SurveyTemplate findTemplateById(long id) {
+        return findById(() -> surveyTemplateRepository.findById(id));
+    }
+
+    private <T> T findById(Supplier<Optional<T>> supplier) {
+        return supplier.get().orElseThrow(() -> new SurveyNotFoundException(SURVEY_NOT_FOUND_ERROR_MESSAGE));
     }
 }
